@@ -1,7 +1,7 @@
 {
   "name": "labo3-kleurkiezer",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "type": "module",
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",
