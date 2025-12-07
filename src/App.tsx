@@ -1,14 +1,8 @@
-import React, { Fragment } from "react";
-
-import "./App.css";
-import ColorPicker from "./components/ColorPicker";
+import React from "react";
+import AppLayout from "./components/AppLayout";
 
 function App() {
-  return (
-    <Fragment>
-      <ColorPicker />
-    </Fragment>
-  );
+  return <AppLayout />;
 }
 
 export default App;
