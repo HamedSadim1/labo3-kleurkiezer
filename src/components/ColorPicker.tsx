@@ -6,6 +6,7 @@ import ColorDisplay from "./ColorDisplay";
 import ColorValues from "./ColorValues";
 import ColorHarmony from "./ColorHarmony";
 import ContrastChecker from "./ContrastChecker";
+import SavedColors from "./SavedColors";
 import { DEFAULT_COLOR } from "../constants/colors";
 
 interface ColorPickerProps {
@@ -15,6 +16,8 @@ interface ColorPickerProps {
 
 const RECENTS_KEY = "color-studio-recents";
 const MAX_RECENTS = 6;
+const SAVED_KEY = "color-studio-saved";
+const MAX_SAVED = 8;
 
 const SectionTitle: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -35,9 +38,25 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
     }
   });
 
+  const [savedColors, setSavedColors] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem(SAVED_KEY);
+      const parsed: unknown = saved ? JSON.parse(saved) : [];
+      return Array.isArray(parsed)
+        ? parsed.filter((item): item is string => typeof item === "string")
+        : [];
+    } catch {
+      return [];
+    }
+  });
+
   useEffect(() => {
     localStorage.setItem(RECENTS_KEY, JSON.stringify(recentColors));
   }, [recentColors]);
+
+  useEffect(() => {
+    localStorage.setItem(SAVED_KEY, JSON.stringify(savedColors));
+  }, [savedColors]);
 
   /**
    * Sliders and the native picker fire continuously, so they call
@@ -58,6 +77,14 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
   };
 
   const resetRecents = () => setRecentColors([color]);
+
+  const saveColor = () => {
+    setSavedColors((prev) =>
+      prev.some((item) => item.toLowerCase() === color.toLowerCase())
+        ? prev
+        : [color, ...prev].slice(0, MAX_SAVED),
+    );
+  };
 
   return (
     <div className="glass w-full max-w-4xl animate-fade-up">
@@ -95,7 +122,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
         </div>
       </div>
 
-      <div className="mt-8 grid gap-6 border-t border-white/10 pt-6 sm:grid-cols-3">
+      <div className="mt-8 grid gap-6 border-t border-white/10 pt-6 sm:grid-cols-2 lg:grid-cols-4">
         <section>
           <SectionTitle>Harmonies</SectionTitle>
           <ColorHarmony
@@ -139,6 +166,22 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
               />
             ))}
           </div>
+        </section>
+        <section>
+          <SavedColors
+            color={color}
+            saved={savedColors}
+            onSave={saveColor}
+            onSelect={(next) => handleChange(next, true)}
+            onRemove={(savedColor) =>
+              setSavedColors((prev) =>
+                prev.filter(
+                  (item) => item.toLowerCase() !== savedColor.toLowerCase(),
+                ),
+              )
+            }
+            onClear={() => setSavedColors([])}
+          />
         </section>
       </div>
     </div>
