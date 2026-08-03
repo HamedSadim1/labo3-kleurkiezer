@@ -1,6 +1,6 @@
 {
-  "short_name": "Color Picker",
-  "name": "Color Picker App",
+  "short_name": "Color Studio",
+  "name": "Color Studio — Color Picker",
   "icons": [
     {
       "src": "favicon.png",
@@ -20,6 +20,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#070b18",
+  "background_color": "#070b18"
 }

@@ -1,94 +1,137 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ColorInput from "./ColorInput";
 import ColorSelect from "./ColorSelect";
 import ColorDisplay from "./ColorDisplay";
+import ColorValues from "./ColorValues";
+import ColorHarmony from "./ColorHarmony";
+import ContrastChecker from "./ContrastChecker";
 import { DEFAULT_COLOR } from "../constants/colors";
-import { hexToRgb } from "../utils/colorUtils";
 
-const ColorPicker: React.FC = () => {
-  const [color, setColor] = useState(DEFAULT_COLOR);
-  const [recentColors, setRecentColors] = useState<string[]>([DEFAULT_COLOR]);
-  const [copied, setCopied] = useState(false);
+interface ColorPickerProps {
+  color: string;
+  onChange: (color: string) => void;
+}
 
-  const handleColorChange = (newColor: string) => {
-    setColor(newColor);
-    if (!recentColors.includes(newColor)) {
-      setRecentColors((prev) => [newColor, ...prev.slice(0, 4)]);
-    }
-  };
+const RECENTS_KEY = "color-studio-recents";
+const MAX_RECENTS = 6;
 
-  const copyToClipboard = async () => {
+const SectionTitle: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => (
+  <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
+    {children}
+  </h2>
+);
+
+const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
+  const [recentColors, setRecentColors] = useState<string[]>(() => {
     try {
-      await navigator.clipboard.writeText(color);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Failed to copy: ", err);
+      const saved = localStorage.getItem(RECENTS_KEY);
+      const parsed: string[] = saved ? JSON.parse(saved) : [];
+      return parsed.length ? parsed : [DEFAULT_COLOR];
+    } catch {
+      return [DEFAULT_COLOR];
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(RECENTS_KEY, JSON.stringify(recentColors));
+  }, [recentColors]);
+
+  /**
+   * Sliders and the native picker fire continuously, so they call
+   * handleChange with commit=false to keep the recent list clean.
+   */
+  const handleChange = (nextColor: string, commit = true) => {
+    onChange(nextColor);
+    if (commit) {
+      setRecentColors((prev) =>
+        [
+          nextColor,
+          ...prev.filter(
+            (recent) => recent.toLowerCase() !== nextColor.toLowerCase(),
+          ),
+        ].slice(0, MAX_RECENTS),
+      );
     }
   };
 
-  const rgb = hexToRgb(color);
+  const resetRecents = () => setRecentColors([color]);
 
   return (
-    <div className="glass max-w-md mx-auto">
-      <h1 className="text-white text-3xl font-bold mb-6 text-center">
-        🎨 Color Picker
-      </h1>
-
-      <div className="space-y-4">
-        <div>
-          <label className="block text-white text-lg font-semibold mb-2">
-            Pick a Color:
-          </label>
-          <ColorInput color={color} onChange={handleColorChange} />
+    <div className="glass w-full max-w-4xl animate-fade-up">
+      <div className="grid gap-8 sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        {/* Preview + values */}
+        <div className="flex flex-col items-center gap-6">
+          <ColorDisplay color={color} />
+          <ColorValues color={color} />
         </div>
 
-        <div>
-          <label className="block text-white text-lg font-semibold mb-2">
-            Choose from Palette:
-          </label>
-          <ColorSelect color={color} onChange={handleColorChange} />
+        {/* Inputs + palette */}
+        <div className="flex flex-col gap-6">
+          <section>
+            <SectionTitle>Pick a color</SectionTitle>
+            <ColorInput
+              color={color}
+              onChange={(next) => handleChange(next, false)}
+              onCommit={(next) => handleChange(next, true)}
+            />
+          </section>
+          <section>
+            <SectionTitle>Palette</SectionTitle>
+            <ColorSelect
+              color={color}
+              onChange={(next) => handleChange(next, true)}
+            />
+          </section>
         </div>
+      </div>
 
-        <ColorDisplay color={color} />
-
-        <div className="bg-white/10 rounded-lg p-4">
-          <h3 className="text-white font-semibold mb-2">Color Info:</h3>
-          <p className="text-white">
-            Hex: <span className="font-mono">{color.toUpperCase()}</span>
-          </p>
-          {rgb && (
-            <p className="text-white">
-              RGB:{" "}
-              <span className="font-mono">
-                rgb({rgb.r}, {rgb.g}, {rgb.b})
-              </span>
-            </p>
-          )}
-          <button
-            onClick={copyToClipboard}
-            className="mt-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-white font-semibold transition-colors"
-          >
-            {copied ? "Copied!" : "Copy Hex"}
-          </button>
-        </div>
-
-        {recentColors.length > 1 && (
-          <div>
-            <h3 className="text-white font-semibold mb-2">Recent Colors:</h3>
-            <div className="flex space-x-2">
-              {recentColors.slice(1).map((recentColor, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleColorChange(recentColor)}
-                  className="w-8 h-8 rounded-full border-2 border-white/50 shadow-lg hover:scale-110 transition-transform"
-                  style={{ backgroundColor: recentColor }}
-                  title={recentColor}
-                />
-              ))}
-            </div>
+      <div className="mt-8 grid gap-6 border-t border-white/10 pt-6 sm:grid-cols-3">
+        <section>
+          <SectionTitle>Harmonies</SectionTitle>
+          <ColorHarmony
+            color={color}
+            onChange={(next) => handleChange(next, true)}
+          />
+        </section>
+        <section>
+          <SectionTitle>Contrast</SectionTitle>
+          <ContrastChecker color={color} />
+        </section>
+        <section>
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
+              Recent
+            </h2>
+            {recentColors.length > 1 && (
+              <button
+                type="button"
+                onClick={resetRecents}
+                className="text-[11px] font-medium text-white/40 underline-offset-2 transition-colors hover:text-white/80 hover:underline"
+              >
+                Clear
+              </button>
+            )}
           </div>
-        )}
+          <div className="flex flex-wrap gap-2.5">
+            {recentColors.map((recent) => (
+              <button
+                key={recent}
+                type="button"
+                onClick={() => handleChange(recent, true)}
+                title={recent.toUpperCase()}
+                aria-label={`Select recent color ${recent.toUpperCase()}`}
+                className={`h-9 w-9 rounded-full border transition-all duration-200 hover:scale-110 ${
+                  recent.toLowerCase() === color.toLowerCase()
+                    ? "border-white ring-2 ring-white/30"
+                    : "border-white/20"
+                }`}
+                style={{ backgroundColor: recent }}
+              />
+            ))}
+          </div>
+        </section>
       </div>
     </div>
   );

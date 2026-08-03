@@ -6,11 +6,21 @@ interface ColorDisplayProps {
 
 const ColorDisplay: React.FC<ColorDisplayProps> = ({ color }) => {
   return (
-    <div className="flex justify-center">
+    <div className="relative mx-auto h-40 w-40 sm:h-52 sm:w-52">
+      {/* Ambient glow */}
       <div
-        className="w-32 h-32 rounded-full border-4 border-white/50 shadow-2xl animate-pulse"
+        className="absolute -inset-6 rounded-full opacity-40 blur-2xl transition-colors duration-500"
         style={{ backgroundColor: color }}
-      ></div>
+      />
+      {/* Glossy sphere */}
+      <div
+        className="relative h-full w-full rounded-full border border-white/20 shadow-[0_30px_70px_-15px_rgba(0,0,0,0.7)] transition-colors duration-300"
+        style={{
+          backgroundColor: color,
+          backgroundImage:
+            "radial-gradient(circle at 30% 25%, rgba(255,255,255,0.5), rgba(255,255,255,0) 55%), radial-gradient(circle at 72% 82%, rgba(0,0,0,0.3), rgba(0,0,0,0) 55%)",
+        }}
+      />
     </div>
   );
 };
