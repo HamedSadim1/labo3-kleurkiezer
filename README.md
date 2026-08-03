@@ -70,6 +70,24 @@ A modern, beautiful color picker application built with React, TypeScript, and T
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
 - `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+- `npm run lint:fix` - Run ESLint and auto-fix issues
+- `npm run format` - Format all files with Prettier
+- `npm run format:check` - Check if all files are formatted
+- `npm run typecheck` - Type-check the project with `tsc --noEmit`
+
+## 🛠️ Dev Tooling
+
+- **Husky** - Git hooks. A `pre-commit` hook runs `lint-staged`, a `commit-msg` hook validates messages with `commitlint` (conventional commits, e.g. `feat: ...`, `fix: ...`).
+- **lint-staged** - Runs ESLint and Prettier only on staged files before each commit.
+- **ESLint** - Flat config with `typescript-eslint`, `eslint-plugin-react-hooks` and `eslint-plugin-react-refresh`.
+- **Prettier** - Code formatting, enforced in CI via `npm run format:check`.
+- **Commitlint** - Enforces Conventional Commits (types like `feat`, `fix`, `chore`).
+- **GitHub Actions** - CI pipeline (`lint`, `typecheck`, `format:check`, `build`) on every push/PR to `main`. A pull request template lives in `.github/pull_request_template.md`.
+
+### TypeScript 7 note
+
+TypeScript 7 (native compiler) is installed under the `@typescript/native` alias and used by `npm run typecheck`. Because TS7 does not expose a stable programmatic API yet, the `typescript` dependency is aliased to `@typescript/typescript6` so tooling like `typescript-eslint` keeps working. `tsc` runs TS7, `tsc6` runs the TS6 compiler.
 
 ## 🏗️ Project Structure
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import ColorInput from "./ColorInput";
 import ColorSelect from "./ColorSelect";
 import ColorDisplay from "./ColorDisplay";
