@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ColorInput from "./ColorInput";
 import ColorSelect from "./ColorSelect";
+import HslPicker from "./HslPicker";
 import ColorDisplay from "./ColorDisplay";
 import ColorValues from "./ColorValues";
 import ColorHarmony from "./ColorHarmony";
@@ -75,6 +76,13 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
               color={color}
               onChange={(next) => handleChange(next, false)}
               onCommit={(next) => handleChange(next, true)}
+            />
+          </section>
+          <section>
+            <SectionTitle>HSL wheel</SectionTitle>
+            <HslPicker
+              color={color}
+              onChange={(next) => handleChange(next, false)}
             />
           </section>
           <section>
