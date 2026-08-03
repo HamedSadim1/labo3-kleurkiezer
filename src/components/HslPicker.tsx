@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { hexToHsl, hslToHex } from "../utils/colorUtils";
 
 interface HslPickerProps {
@@ -9,6 +9,7 @@ interface HslPickerProps {
 const WHEEL_SIZE = 176;
 const PLANE_SIZE = 176;
 const MARKER_RADIUS_PCT = 44;
+const MODE_KEY = "color-studio-hsl-mode";
 
 type HslMode = "sliders" | "plane";
 
@@ -21,11 +22,27 @@ const clamp = (value: number, min: number, max: number) =>
   Math.min(max, Math.max(min, value));
 
 const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
-  const [mode, setMode] = useState<HslMode>("sliders");
+  const [mode, setMode] = useState<HslMode>(() => {
+    try {
+      const saved = localStorage.getItem(MODE_KEY);
+      return saved === "sliders" || saved === "plane" ? saved : "sliders";
+    } catch {
+      return "sliders";
+    }
+  });
   const hsl = hexToHsl(color) ?? { h: 0, s: 100, l: 50 };
   const hue = hsl.h % 360;
   const wheelRef = useRef<HTMLDivElement>(null);
   const planeRef = useRef<HTMLDivElement>(null);
+
+  // Remember the chosen mode across sessions.
+  useEffect(() => {
+    try {
+      localStorage.setItem(MODE_KEY, mode);
+    } catch {
+      // Storage unavailable — ignore.
+    }
+  }, [mode]);
 
   /* ----- Hue wheel ----- */
 
