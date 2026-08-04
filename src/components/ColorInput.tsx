@@ -14,7 +14,9 @@ import {
   HEX_DIGITS,
   PICKER_SWATCH_SIZE,
   RGB_MAX,
+  SURFACE_CARD,
   SWATCH_GLOSS_ALPHA,
+  TEXT_MUTED,
   hexToRgb,
   type ChannelKey,
   type HexColor,
@@ -85,7 +87,7 @@ const ColorInput: React.FC<ColorInputProps> = ({
       {/* Native picker + hex field */}
       <div className="flex items-center gap-3">
         <label
-          className={`relative block ${PICKER_SWATCH_SIZE} shrink-0 cursor-pointer overflow-hidden rounded-xl border border-white/20 shadow-lg transition-transform hover:scale-105`}
+          className={`relative block ${PICKER_SWATCH_SIZE} shrink-0 cursor-pointer overflow-hidden rounded-xl border border-white/20 shadow-lg transition-transform hover:scale-105 focus-within:ring-2 focus-within:ring-white/70`}
           title={COPY.picker.openSystemPicker}
         >
           <input
@@ -108,8 +110,10 @@ const ColorInput: React.FC<ColorInputProps> = ({
         </label>
 
         <form onSubmit={handleHexSubmit} className="flex-1">
-          <div className="flex items-center gap-2 rounded-xl border border-white/15 bg-white/6 px-3 focus-within:border-white/40">
-            <span className="text-white/40">#</span>
+          <div
+            className={`flex items-center gap-2 rounded-xl border border-white/15 ${SURFACE_CARD} px-3 focus-within:border-white/40`}
+          >
+            <span className={TEXT_MUTED}>#</span>
             <label htmlFor="hex-value" className="sr-only">
               {COPY.picker.hexValueLabel}
             </label>
@@ -167,7 +171,7 @@ const ColorInput: React.FC<ColorInputProps> = ({
                 const num = Number(value);
                 if (!Number.isNaN(num)) handleSlider(key, num);
               }}
-              className={`${CHANNEL_NUMBER_WIDTH} rounded-lg border border-white/10 bg-white/6 px-1.5 py-1 text-center font-mono text-xs text-white outline-none focus:border-white/40`}
+              className={`${CHANNEL_NUMBER_WIDTH} rounded-lg border border-white/10 ${SURFACE_CARD} px-1.5 py-1 text-center font-mono text-xs text-white outline-none focus:border-white/40`}
               aria-label={COPY.picker.channelNumberValue(label)}
             />
           </div>

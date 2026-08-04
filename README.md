@@ -106,6 +106,7 @@ src/
 │   ├── HslPicker.tsx
 │   ├── HslSliderRow.tsx
 │   ├── HueWheel.tsx
+│   ├── IconButton.tsx
 │   ├── icons.tsx
 │   ├── SavedColors.tsx
 │   ├── SaturationLightnessPlane.tsx

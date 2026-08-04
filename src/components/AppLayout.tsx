@@ -8,6 +8,8 @@ import {
   BG_BLOB_PRIMARY,
   COLOR_KEY,
   DEFAULT_COLOR,
+  SURFACE_CARD,
+  TEXT_FAINT,
   type HexColor,
 } from "../constants";
 import useLocalStorage from "../hooks/useLocalStorage";
@@ -44,7 +46,9 @@ const AppLayout: React.FC = () => {
 
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center px-4 py-10 sm:py-16">
         <header className="mb-10 text-center">
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-white/55 backdrop-blur">
+          <div
+            className={`mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 ${SURFACE_CARD} px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-white/55 backdrop-blur`}
+          >
             <span
               className="h-2 w-2 rounded-full transition-colors duration-300"
               style={{ backgroundColor: color }}
@@ -64,7 +68,7 @@ const AppLayout: React.FC = () => {
 
         <ColorPicker color={color} onChange={setColor} />
 
-        <footer className="mt-12 text-center text-xs text-white/30">
+        <footer className={`mt-12 text-center text-xs ${TEXT_FAINT}`}>
           {COPY.app.footer}
         </footer>
       </div>

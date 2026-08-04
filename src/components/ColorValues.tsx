@@ -3,12 +3,17 @@ import { hexToHsl } from "../utils/colorUtils";
 import useTimedReset from "../hooks/useTimedReset";
 import {
   COPY_BUTTON_SIZE,
+  SURFACE_CARD,
+  SURFACE_HOVER,
+  SURFACE_RAISED,
+  TEXT_MUTED,
   VALUE_LABEL_WIDTH,
   hexToRgb,
   type HexColor,
 } from "../constants";
 import { copyToClipboard } from "../utils/clipboardUtils";
 import { COPY } from "../copy";
+import IconButton from "./IconButton";
 import { CheckIcon, CopyIcon } from "./icons";
 
 interface ColorValuesProps {
@@ -46,29 +51,28 @@ const ColorValues: React.FC<ColorValuesProps> = ({ color }) => {
       {rows.map((row) => (
         <div
           key={row.key}
-          className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5"
+          className={`flex items-center justify-between gap-3 rounded-xl border border-white/10 ${SURFACE_CARD} px-3 py-2.5`}
         >
           <span
-            className={`${VALUE_LABEL_WIDTH} shrink-0 text-[10px] font-semibold uppercase tracking-widest text-white/40`}
+            className={`${VALUE_LABEL_WIDTH} shrink-0 text-[10px] font-semibold uppercase tracking-widest ${TEXT_MUTED}`}
           >
             {row.label}
           </span>
           <span className="min-w-0 flex-1 truncate text-right font-mono text-sm text-white/90">
             {row.value}
           </span>
-          <button
-            type="button"
+          <IconButton
+            label={COPY.formats.copyValue(row.label)}
+            title={COPY.formats.copyLabel(row.label)}
             onClick={() => copy(row.key, row.value)}
-            className={`flex ${COPY_BUTTON_SIZE} shrink-0 items-center justify-center rounded-lg transition-all ${
+            className={`${COPY_BUTTON_SIZE} rounded-lg ${
               copied === row.key
                 ? "bg-emerald-400/20 text-emerald-300"
-                : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
+                : `${SURFACE_RAISED} text-white/70 ${SURFACE_HOVER} hover:text-white`
             }`}
-            aria-label={COPY.formats.copyValue(row.label)}
-            title={COPY.formats.copyLabel(row.label)}
           >
             {copied === row.key ? <CheckIcon /> : <CopyIcon />}
-          </button>
+          </IconButton>
         </div>
       ))}
     </div>

@@ -223,6 +223,27 @@ export const CONTROL_SHADOW: string =
 export const CONTROL_FOCUS_RING: string =
   "focus-visible:ring-2 focus-visible:ring-white/70";
 
+/** Background for standard card rows and inputs (kept in sync with .glass in index.css). */
+export const SURFACE_CARD: string = "bg-white/5";
+
+/** Background for raised interactive elements (icon buttons, save button). */
+export const SURFACE_RAISED: string = "bg-white/10";
+
+/** Background for the selected option inside a segmented control. */
+export const SURFACE_SELECTED: string = "bg-white/15";
+
+/** Hover background for raised interactive elements. */
+export const SURFACE_HOVER: string = "hover:bg-white/20";
+
+/** Muted label text — WCAG AA compliant on the app background (was white/40–45). */
+export const TEXT_MUTED: string = "text-white/60";
+
+/** Faint decorative text (e.g. the footer) — WCAG AA compliant for 12px+ text. */
+export const TEXT_FAINT: string = "text-white/50";
+
+/** Dark backdrop for the contrast rating badge (independent of the sample color). */
+export const BADGE_BG_CLASS: string = "bg-[#0b1020]/80";
+
 /** Tailwind text color per WCAG rating badge (used by the ContrastChecker). */
 export const RATING_CLASS: Record<ContrastRating, string> = {
   AAA: "text-emerald-300",
@@ -282,8 +303,8 @@ export const RECENT_SWATCH_SIZE: string = "h-9 w-9 rounded-full";
 /** Width of the S/L slider column in the HSL picker. */
 export const SLIDER_COLUMN_WIDTH: string = "w-44";
 
-/** Grid columns for the palette swatches. */
-export const PALETTE_GRID_COLS: string = "grid-cols-6";
+/** Grid columns for the palette swatches (4 on mobile, 6 from sm up). */
+export const PALETTE_GRID_COLS: string = "grid-cols-4 sm:grid-cols-6";
 
 /** Grid columns for the saved-color swatches. */
 export const SAVED_GRID_COLS: string = "grid-cols-4";

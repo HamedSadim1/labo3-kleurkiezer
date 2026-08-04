@@ -1,4 +1,9 @@
 import React from "react";
+import {
+  CONTROL_FOCUS_RING,
+  SURFACE_CARD,
+  SURFACE_SELECTED,
+} from "../constants";
 
 interface SegmentedOption<T extends string> {
   id: T;
@@ -18,16 +23,18 @@ const SegmentedControl = <T extends string>({
   onChange,
 }: SegmentedControlProps<T>): React.JSX.Element => (
   <div className="flex justify-center">
-    <div className="flex rounded-full border border-white/10 bg-white/5 p-1">
+    <div
+      className={`flex rounded-full border border-white/10 ${SURFACE_CARD} p-1`}
+    >
       {options.map((option) => (
         <button
           key={option.id}
           type="button"
           onClick={() => onChange(option.id)}
           aria-pressed={value === option.id}
-          className={`rounded-full px-4 py-1.5 text-xs font-medium transition-all ${
+          className={`rounded-full px-4 py-1.5 text-xs font-medium transition-all ${CONTROL_FOCUS_RING} ${
             value === option.id
-              ? "bg-white/15 text-white shadow"
+              ? `${SURFACE_SELECTED} text-white shadow`
               : "text-white/50 hover:text-white/80"
           }`}
         >

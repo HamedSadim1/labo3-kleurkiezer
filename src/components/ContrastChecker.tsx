@@ -2,10 +2,12 @@ import React from "react";
 import { getContrastRatio, getTextColor } from "../utils/colorUtils";
 import { getRatingBadge } from "../utils/contrastUtils";
 import {
+  BADGE_BG_CLASS,
   CONTRAST_DECIMALS,
   CONTRAST_SWATCH_SIZE,
   DARK_TEXT,
   LIGHT_TEXT,
+  TEXT_MUTED,
   type HexColor,
 } from "../constants";
 import { COPY } from "../copy";
@@ -58,16 +60,14 @@ const ContrastChecker: React.FC<ContrastCheckerProps> = ({ color }) => {
             </span>
           </span>
           <span
-            className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold ${sample.rating.className} ${
-              sample.rating.badge === "Fail" ? "bg-rose-400/10" : "bg-white/10"
-            }`}
+            className={`shrink-0 rounded-full ${BADGE_BG_CLASS} px-2 py-0.5 text-[10px] font-bold ${sample.rating.className}`}
           >
             {sample.rating.badge}
           </span>
         </div>
       ))}
 
-      <p className="text-[11px] text-white/45">
+      <p className={`text-[11px] ${TEXT_MUTED}`}>
         {COPY.contrast.recommended}{" "}
         <span className="font-mono text-white/70">
           {recommended === LIGHT_TEXT

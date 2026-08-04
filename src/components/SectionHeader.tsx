@@ -1,4 +1,5 @@
 import React from "react";
+import { CONTROL_FOCUS_RING, TEXT_MUTED } from "../constants";
 import { COPY } from "../copy";
 
 interface SectionHeaderProps {
@@ -9,7 +10,9 @@ interface SectionHeaderProps {
 /** Shared section heading (e.g. "Palette", "Recent") with an optional action. */
 const SectionHeader: React.FC<SectionHeaderProps> = ({ title, action }) => (
   <div className="mb-3 flex items-center justify-between gap-2">
-    <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
+    <h2
+      className={`text-[11px] font-semibold uppercase tracking-[0.18em] ${TEXT_MUTED}`}
+    >
       {title}
     </h2>
     {action}
@@ -23,7 +26,7 @@ export const ClearButton: React.FC<{ onClick: () => void; label?: string }> = ({
   <button
     type="button"
     onClick={onClick}
-    className="text-[11px] font-medium text-white/40 underline-offset-2 transition-colors hover:text-white/80 hover:underline"
+    className={`rounded text-[11px] font-medium ${TEXT_MUTED} underline-offset-2 transition-colors hover:text-white/80 hover:underline ${CONTROL_FOCUS_RING}`}
   >
     {label}
   </button>
