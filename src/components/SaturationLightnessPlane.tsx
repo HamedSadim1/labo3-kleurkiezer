@@ -104,6 +104,31 @@ const SaturationLightnessPlane: React.FC<SaturationLightnessPlaneProps> = ({
           backgroundColor: color,
         }}
       />
+      {/* Corner hints: explain the S/L mapping (top = light, bottom = dark, right = saturated) */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1.5 top-1 text-[8px] font-semibold tracking-wider text-black/50"
+      >
+        L 100%
+      </span>
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-1 left-1.5 text-[8px] font-semibold tracking-wider text-white/70"
+      >
+        L 0%
+      </span>
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute right-1.5 top-1 text-[8px] font-semibold tracking-wider text-black/50"
+      >
+        S 100%
+      </span>
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute bottom-1 right-1.5 text-[8px] font-semibold tracking-wider text-white/70"
+      >
+        S 0%
+      </span>
     </div>
   );
 };
