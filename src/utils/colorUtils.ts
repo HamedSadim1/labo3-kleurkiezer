@@ -65,6 +65,18 @@ export const isValidHexColor = (color: string): color is HexColor => {
 export const colorsEqual = (a: string, b: string): boolean =>
   a.toLowerCase() === b.toLowerCase();
 
+/** Prepend a color to a list, de-duplicating case-insensitively, capped at `max`. */
+export const prependUnique = (
+  list: HexColor[],
+  color: HexColor,
+  max: number,
+): HexColor[] =>
+  [color, ...list.filter((item) => !colorsEqual(item, color))].slice(0, max);
+
+/** Return the list without any case-insensitive matches of `color`. */
+export const withoutColor = (list: HexColor[], color: HexColor): HexColor[] =>
+  list.filter((item) => !colorsEqual(item, color));
+
 /** Subtle glossy highlight overlay used on color swatches. */
 export const glossOverlay = (alpha = 0.25): string =>
   `radial-gradient(circle at 30% 30%, rgba(255,255,255,${alpha}), rgba(255,255,255,0) 60%)`;

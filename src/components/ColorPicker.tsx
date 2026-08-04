@@ -14,6 +14,8 @@ import useLocalStorage from "../hooks/useLocalStorage";
 import {
   colorsEqual,
   isValidHexColor,
+  prependUnique,
+  withoutColor,
   type HexColor,
 } from "../utils/colorUtils";
 
@@ -64,23 +66,14 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
   const handleChange = (nextColor: HexColor, commit = true) => {
     onChange(nextColor);
     if (commit) {
-      setRecentColors((prev) =>
-        [
-          nextColor,
-          ...prev.filter((recent) => !colorsEqual(recent, nextColor)),
-        ].slice(0, MAX_RECENTS),
-      );
+      setRecentColors((prev) => prependUnique(prev, nextColor, MAX_RECENTS));
     }
   };
 
   const resetRecents = () => setRecentColors([color]);
 
   const saveColor = () => {
-    setSavedColors((prev) =>
-      prev.some((item) => colorsEqual(item, color))
-        ? prev
-        : [color, ...prev].slice(0, MAX_SAVED),
-    );
+    setSavedColors((prev) => prependUnique(prev, color, MAX_SAVED));
   };
 
   return (
@@ -162,9 +155,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
             onSave={saveColor}
             onSelect={(next) => handleChange(next, true)}
             onRemove={(savedColor) =>
-              setSavedColors((prev) =>
-                prev.filter((item) => !colorsEqual(item, savedColor)),
-              )
+              setSavedColors((prev) => withoutColor(prev, savedColor))
             }
             onClear={() => setSavedColors([])}
           />
