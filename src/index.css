@@ -124,3 +124,15 @@
     @apply rounded-3xl border border-white/10 bg-white/5 p-5 shadow-[0_25px_80px_-20px_rgba(0,0,0,0.7)] backdrop-blur-2xl sm:p-8;
   }
 }
+
+/* Respect users who prefer reduced motion (WCAG 2.3.3). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

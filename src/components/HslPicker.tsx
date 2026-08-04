@@ -6,11 +6,10 @@ import {
   saturationGradient,
 } from "../utils/colorUtils";
 import {
+  DEFAULT_HSL,
   HUE_MAX,
-  LIGHTNESS_MID,
   MODE_KEY,
   MODES,
-  PERCENT_MAX,
   SLIDER_COLUMN_WIDTH,
   isHslMode,
   type HslMode,
@@ -34,11 +33,7 @@ const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
     deserialize: (raw) => (isHslMode(raw) ? raw : MODES[0].id),
     serialize: serializeRaw,
   });
-  const hsl = hexToHsl(color) ?? {
-    h: 0,
-    s: PERCENT_MAX,
-    l: LIGHTNESS_MID,
-  };
+  const hsl = hexToHsl(color) ?? DEFAULT_HSL;
   const hue = hsl.h % HUE_MAX;
 
   const updateHue = (nextHue: number) =>

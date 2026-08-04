@@ -66,7 +66,9 @@ const AppLayout: React.FC = () => {
           </p>
         </header>
 
-        <ColorPicker color={color} onChange={setColor} />
+        <main className="flex w-full flex-col items-center">
+          <ColorPicker color={color} onChange={setColor} />
+        </main>
 
         <footer className={`mt-12 text-center text-xs ${TEXT_FAINT}`}>
           {COPY.app.footer}

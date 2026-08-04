@@ -38,6 +38,15 @@ const ColorInput: React.FC<ColorInputProps> = ({
   const [hexText, setHexText] = useState<string>(color);
   const [isEditing, setIsEditing] = useState(false);
   const [invalid, setInvalid] = useState(false);
+  // Draft pattern for the RGB number inputs: while focused, the typed text is
+  // kept as-is (no clamping to 0–255 while typing); the color updates on commit
+  // (blur or Enter) so values like "300" don't snap back to 255 immediately.
+  const [channelText, setChannelText] = useState<Record<ChannelKey, string>>({
+    r: "",
+    g: "",
+    b: "",
+  });
+  const [activeChannel, setActiveChannel] = useState<ChannelKey | null>(null);
   const rgb = hexToRgb(color) ?? { r: 0, g: 0, b: 0 };
 
   const displayedHex = (isEditing ? hexText : color).replace(/^#/, "");
@@ -80,6 +89,23 @@ const ColorInput: React.FC<ColorInputProps> = ({
   const handleSlider = (channel: ChannelKey, value: number) => {
     const next = { ...rgb, [channel]: value };
     onChange(rgbToHex(next.r, next.g, next.b));
+  };
+
+  const handleChannelFocus = (key: ChannelKey) => {
+    setChannelText((prev) => ({ ...prev, [key]: String(rgb[key]) }));
+    setActiveChannel(key);
+  };
+
+  const commitChannel = (key: ChannelKey) => {
+    if (activeChannel !== key) return;
+    const value = channelText[key];
+    if (value !== "") {
+      const num = Number(value);
+      if (!Number.isNaN(num)) {
+        handleSlider(key, Math.min(RGB_MAX, Math.max(0, Math.round(num))));
+      }
+    }
+    setActiveChannel(null);
   };
 
   return (
@@ -126,7 +152,7 @@ const ColorInput: React.FC<ColorInputProps> = ({
               onBlur={handleBlur}
               maxLength={HEX_DIGITS}
               spellCheck={false}
-              className={`w-full bg-transparent py-2.5 font-mono text-sm tracking-wider outline-none placeholder:text-white/25 ${
+              className={`w-full bg-transparent py-2.5 font-mono text-sm tracking-wider outline-none placeholder:text-white/40 ${
                 invalid ? "text-rose-300" : "text-white"
               }`}
               placeholder={DEFAULT_COLOR.replace(/^#/, "").toUpperCase()}
@@ -164,12 +190,20 @@ const ColorInput: React.FC<ColorInputProps> = ({
               type="number"
               min={0}
               max={RGB_MAX}
-              value={rgb[key]}
-              onChange={(event) => {
-                const value = event.target.value;
-                if (value === "") return;
-                const num = Number(value);
-                if (!Number.isNaN(num)) handleSlider(key, num);
+              value={activeChannel === key ? channelText[key] : rgb[key]}
+              onFocus={() => handleChannelFocus(key)}
+              onChange={(event) =>
+                setChannelText((prev) => ({
+                  ...prev,
+                  [key]: event.target.value,
+                }))
+              }
+              onBlur={() => commitChannel(key)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.preventDefault();
+                  event.currentTarget.blur();
+                }
               }}
               className={`${CHANNEL_NUMBER_WIDTH} rounded-lg border border-white/10 ${SURFACE_CARD} px-1.5 py-1 text-center font-mono text-xs text-white outline-none focus:border-white/40`}
               aria-label={COPY.picker.channelNumberValue(label)}

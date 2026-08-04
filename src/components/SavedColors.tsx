@@ -15,7 +15,8 @@ import useTimedReset from "../hooks/useTimedReset";
 import ColorSwatch from "./ColorSwatch";
 import IconButton from "./IconButton";
 import { BookmarkIcon } from "./icons";
-import SectionHeader, { ClearButton } from "./SectionHeader";
+import Panel from "./Panel";
+import { ClearButton } from "./SectionHeader";
 
 interface SavedColorsProps {
   color: HexColor;
@@ -43,29 +44,27 @@ const SavedColors: React.FC<SavedColorsProps> = ({
   };
 
   return (
-    <div>
-      <SectionHeader
-        title={COPY.sections.saved}
-        action={
-          <div className="flex items-center gap-1.5">
-            {saved.length > 1 && <ClearButton onClick={onClear} />}
-            <button
-              type="button"
-              onClick={handleSave}
-              disabled={isSaved}
-              className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold transition-all ${CONTROL_FOCUS_RING} ${
-                isSaved || justSaved
-                  ? "bg-emerald-400/20 text-emerald-300"
-                  : `${SURFACE_RAISED} text-white/80 ${SURFACE_HOVER}`
-              } disabled:cursor-default`}
-            >
-              <BookmarkIcon filled={isSaved || justSaved} />
-              {isSaved || justSaved ? COPY.saved.saved : COPY.saved.save}
-            </button>
-          </div>
-        }
-      />
-
+    <Panel
+      title={COPY.sections.saved}
+      action={
+        <div className="flex items-center gap-1.5">
+          {saved.length > 1 && <ClearButton onClick={onClear} />}
+          <button
+            type="button"
+            onClick={handleSave}
+            disabled={isSaved}
+            className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold transition-all ${CONTROL_FOCUS_RING} ${
+              isSaved || justSaved
+                ? "bg-emerald-400/20 text-emerald-300"
+                : `${SURFACE_RAISED} text-white/80 ${SURFACE_HOVER}`
+            } disabled:cursor-default`}
+          >
+            <BookmarkIcon filled={isSaved || justSaved} />
+            {isSaved || justSaved ? COPY.saved.saved : COPY.saved.save}
+          </button>
+        </div>
+      }
+    >
       {saved.length === 0 ? (
         <p className={`text-[11px] leading-relaxed ${TEXT_MUTED}`}>
           {COPY.saved.empty}
@@ -96,7 +95,7 @@ const SavedColors: React.FC<SavedColorsProps> = ({
           })}
         </div>
       )}
-    </div>
+    </Panel>
   );
 };
 

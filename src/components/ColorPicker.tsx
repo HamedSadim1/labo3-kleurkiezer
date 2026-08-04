@@ -8,7 +8,8 @@ import ColorHarmony from "./ColorHarmony";
 import ContrastChecker from "./ContrastChecker";
 import SavedColors from "./SavedColors";
 import ColorSwatch from "./ColorSwatch";
-import SectionHeader, { ClearButton } from "./SectionHeader";
+import Panel from "./Panel";
+import { ClearButton } from "./SectionHeader";
 import {
   DEFAULT_COLOR,
   MAX_RECENTS,
@@ -80,52 +81,46 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
 
         {/* Inputs + palette */}
         <div className="flex flex-col gap-6">
-          <section>
-            <SectionHeader title={COPY.sections.pickColor} />
+          <Panel title={COPY.sections.pickColor}>
             <ColorInput
               color={color}
               onChange={(next) => handleChange(next, false)}
               onCommit={(next) => handleChange(next, true)}
             />
-          </section>
-          <section>
-            <SectionHeader title={COPY.sections.hslWheel} />
+          </Panel>
+          <Panel title={COPY.sections.hslWheel}>
             <HslPicker
               color={color}
               onChange={(next) => handleChange(next, false)}
             />
-          </section>
-          <section>
-            <SectionHeader title={COPY.sections.palette} />
+          </Panel>
+          <Panel title={COPY.sections.palette}>
             <ColorSelect
               color={color}
               onChange={(next) => handleChange(next, true)}
             />
-          </section>
+          </Panel>
         </div>
       </div>
 
       <div className="mt-8 grid gap-6 border-t border-white/10 pt-6 sm:grid-cols-2 lg:grid-cols-4">
-        <section>
-          <SectionHeader title={COPY.sections.harmonies} />
+        <Panel title={COPY.sections.harmonies}>
           <ColorHarmony
             color={color}
             onChange={(next) => handleChange(next, true)}
           />
-        </section>
-        <section>
-          <SectionHeader title={COPY.sections.contrast} />
+        </Panel>
+        <Panel title={COPY.sections.contrast}>
           <ContrastChecker color={color} />
-        </section>
-        <section>
-          <SectionHeader
-            title={COPY.sections.recent}
-            action={
-              recentColors.length > 1 ? (
-                <ClearButton onClick={resetRecents} />
-              ) : undefined
-            }
-          />
+        </Panel>
+        <Panel
+          title={COPY.sections.recent}
+          action={
+            recentColors.length > 1 ? (
+              <ClearButton onClick={resetRecents} />
+            ) : undefined
+          }
+        >
           <div className="flex flex-wrap gap-2.5">
             {recentColors.map((recent) => (
               <ColorSwatch
@@ -140,19 +135,17 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
               />
             ))}
           </div>
-        </section>
-        <section>
-          <SavedColors
-            color={color}
-            saved={savedColors}
-            onSave={saveColor}
-            onSelect={(next) => handleChange(next, true)}
-            onRemove={(savedColor) =>
-              setSavedColors((prev) => withoutColor(prev, savedColor))
-            }
-            onClear={() => setSavedColors([])}
-          />
-        </section>
+        </Panel>
+        <SavedColors
+          color={color}
+          saved={savedColors}
+          onSave={saveColor}
+          onSelect={(next) => handleChange(next, true)}
+          onRemove={(savedColor) =>
+            setSavedColors((prev) => withoutColor(prev, savedColor))
+          }
+          onClear={() => setSavedColors([])}
+        />
       </div>
     </div>
   );

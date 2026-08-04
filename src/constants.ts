@@ -158,6 +158,13 @@ export const PLANE_KEY_STEP_FAST: number = 10;
 /** Mid lightness (50%) used as the neutral default. */
 export const LIGHTNESS_MID: number = PERCENT_MAX / 2;
 
+/** Fallback HSL values when the current color cannot be parsed. */
+export const DEFAULT_HSL: { h: number; s: number; l: number } = {
+  h: 0,
+  s: PERCENT_MAX,
+  l: LIGHTNESS_MID,
+};
+
 /** Caps for the recents and saved color lists. */
 export const MAX_RECENTS: number = 6;
 export const MAX_SAVED: number = 8;
@@ -292,13 +299,13 @@ export const CONTRAST_SWATCH_SIZE: string = "h-9 w-9";
 export const REMOVE_BADGE_SIZE: string = "h-4 w-4";
 
 /** Swatch size in the harmonies section. */
-export const HARMONY_SWATCH_SIZE: string = "h-7 w-7";
+export const HARMONY_SWATCH_SIZE: string = "h-9 w-9";
 
 /** Width of the harmony group label column. */
 export const HARMONY_LABEL_WIDTH: string = "w-28";
 
 /** Recent-color swatch size in ColorPicker. */
-export const RECENT_SWATCH_SIZE: string = "h-9 w-9 rounded-full";
+export const RECENT_SWATCH_SIZE: string = "h-10 w-10 rounded-full";
 
 /** Width of the S/L slider column in the HSL picker. */
 export const SLIDER_COLUMN_WIDTH: string = "w-44";

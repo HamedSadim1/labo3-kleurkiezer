@@ -108,6 +108,7 @@ src/
 │   ├── HueWheel.tsx
 │   ├── IconButton.tsx
 │   ├── icons.tsx
+│   ├── Panel.tsx
 │   ├── SavedColors.tsx
 │   ├── SaturationLightnessPlane.tsx
 │   ├── SectionHeader.tsx

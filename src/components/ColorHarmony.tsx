@@ -31,7 +31,7 @@ const ColorHarmony: React.FC<ColorHarmonyProps> = ({ color, onChange }) => {
           >
             {group.label}
           </span>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap justify-end gap-2">
             {group.colors.map((harmonyColor) => (
               <ColorSwatch
                 key={harmonyColor}
