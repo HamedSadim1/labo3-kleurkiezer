@@ -9,10 +9,11 @@ import ContrastChecker from "./ContrastChecker";
 import SavedColors from "./SavedColors";
 import { DEFAULT_COLOR } from "../constants/colors";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { isValidHexColor, type HexColor } from "../utils/colorUtils";
 
 interface ColorPickerProps {
-  color: string;
-  onChange: (color: string) => void;
+  color: HexColor;
+  onChange: (color: HexColor) => void;
 }
 
 const RECENTS_KEY = "color-studio-recents";
@@ -28,28 +29,33 @@ const SectionTitle: React.FC<{ children: React.ReactNode }> = ({
   </h2>
 );
 
+/** Parse a stored JSON array into valid hex colors, or null when it is not an array. */
+const parseHexArray = (raw: string): HexColor[] | null => {
+  const parsed: unknown = JSON.parse(raw);
+  if (!Array.isArray(parsed)) return null;
+  return parsed.filter(
+    (item): item is HexColor =>
+      typeof item === "string" && isValidHexColor(item),
+  );
+};
+
 const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
-  const [recentColors, setRecentColors] = useLocalStorage<string[]>(
+  const [recentColors, setRecentColors] = useLocalStorage<HexColor[]>(
     RECENTS_KEY,
     [DEFAULT_COLOR],
     {
       deserialize: (raw) => {
-        const parsed: string[] = JSON.parse(raw);
-        return parsed.length ? parsed : [DEFAULT_COLOR];
+        const valid = parseHexArray(raw);
+        return valid?.length ? valid : [DEFAULT_COLOR];
       },
     },
   );
 
-  const [savedColors, setSavedColors] = useLocalStorage<string[]>(
+  const [savedColors, setSavedColors] = useLocalStorage<HexColor[]>(
     SAVED_KEY,
     [],
     {
-      deserialize: (raw) => {
-        const parsed: unknown = JSON.parse(raw);
-        return Array.isArray(parsed)
-          ? parsed.filter((item): item is string => typeof item === "string")
-          : [];
-      },
+      deserialize: (raw) => parseHexArray(raw) ?? [],
     },
   );
 
@@ -57,7 +63,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
    * Sliders and the native picker fire continuously, so they call
    * handleChange with commit=false to keep the recent list clean.
    */
-  const handleChange = (nextColor: string, commit = true) => {
+  const handleChange = (nextColor: HexColor, commit = true) => {
     onChange(nextColor);
     if (commit) {
       setRecentColors((prev) =>

@@ -1,15 +1,21 @@
 import React from "react";
-import { getContrastRatio, getTextColor } from "../utils/colorUtils";
+import {
+  getContrastRatio,
+  getTextColor,
+  type HexColor,
+} from "../utils/colorUtils";
 
 interface ContrastCheckerProps {
-  color: string;
+  color: HexColor;
 }
 
 const LIGHT_TEXT = "#FFFFFF";
 const DARK_TEXT = "#0F172A";
 
+type RatingBadge = "AAA" | "AA" | "AA large" | "Fail";
+
 interface Rating {
-  badge: string;
+  badge: RatingBadge;
   className: string;
 }
 

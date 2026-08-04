@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import { type HexColor } from "../utils/colorUtils";
 
 interface SavedColorsProps {
-  color: string;
-  saved: string[];
+  color: HexColor;
+  saved: HexColor[];
   onSave: () => void;
-  onSelect: (color: string) => void;
-  onRemove: (color: string) => void;
+  onSelect: (color: HexColor) => void;
+  onRemove: (color: HexColor) => void;
   onClear: () => void;
 }
 

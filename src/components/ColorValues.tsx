@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { hexToRgb, hexToHsl } from "../utils/colorUtils";
+import { hexToRgb, hexToHsl, type HexColor } from "../utils/colorUtils";
 
 interface ColorValuesProps {
-  color: string;
+  color: HexColor;
 }
 
 const CopyIcon: React.FC = () => (
@@ -36,13 +36,15 @@ const CheckIcon: React.FC = () => (
   </svg>
 );
 
+type ValueKey = "hex" | "rgb" | "hsl";
+
 const ColorValues: React.FC<ColorValuesProps> = ({ color }) => {
-  const [copied, setCopied] = useState<string | null>(null);
+  const [copied, setCopied] = useState<ValueKey | null>(null);
 
   const rgb = hexToRgb(color);
   const hsl = hexToHsl(color);
 
-  const rows = [
+  const rows: { key: ValueKey; label: string; value: string }[] = [
     { key: "hex", label: "HEX", value: color.toUpperCase() },
     {
       key: "rgb",
@@ -56,7 +58,7 @@ const ColorValues: React.FC<ColorValuesProps> = ({ color }) => {
     },
   ];
 
-  const copy = async (key: string, value: string) => {
+  const copy = async (key: ValueKey, value: string) => {
     try {
       await navigator.clipboard.writeText(value);
       setCopied(key);
@@ -73,7 +75,7 @@ const ColorValues: React.FC<ColorValuesProps> = ({ color }) => {
       {rows.map((row) => (
         <div
           key={row.key}
-          className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.05] px-3 py-2.5"
+          className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5"
         >
           <span className="w-10 shrink-0 text-[10px] font-semibold uppercase tracking-widest text-white/40">
             {row.label}

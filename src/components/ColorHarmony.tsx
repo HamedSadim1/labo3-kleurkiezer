@@ -1,9 +1,9 @@
 import React from "react";
-import { getHarmony } from "../utils/colorUtils";
+import { getHarmony, type HexColor } from "../utils/colorUtils";
 
 interface ColorHarmonyProps {
-  color: string;
-  onChange: (color: string) => void;
+  color: HexColor;
+  onChange: (color: HexColor) => void;
 }
 
 const ColorHarmony: React.FC<ColorHarmonyProps> = ({ color, onChange }) => {

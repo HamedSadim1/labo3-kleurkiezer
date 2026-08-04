@@ -1,7 +1,8 @@
 import React from "react";
+import { type HexColor } from "../utils/colorUtils";
 
 interface ColorDisplayProps {
-  color: string;
+  color: HexColor;
 }
 
 const ColorDisplay: React.FC<ColorDisplayProps> = ({ color }) => {

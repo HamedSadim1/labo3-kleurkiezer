@@ -1,9 +1,10 @@
 import React from "react";
 import { COLOR_OPTIONS } from "../constants/colors";
+import { type HexColor } from "../utils/colorUtils";
 
 interface ColorSelectProps {
-  color: string;
-  onChange: (color: string) => void;
+  color: HexColor;
+  onChange: (color: HexColor) => void;
 }
 
 const ColorSelect: React.FC<ColorSelectProps> = ({ color, onChange }) => {

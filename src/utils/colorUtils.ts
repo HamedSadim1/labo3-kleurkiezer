@@ -10,7 +10,16 @@ export interface Hsl {
   l: number;
 }
 
-export const isValidHexColor = (color: string): boolean => {
+/** A normalized "#RRGGBB" hex color string. */
+export type HexColor = string & { readonly __brand: "HexColor" };
+
+/** The two text colors that always read well on any background. */
+export type TextColor = "#FFFFFF" | "#0F172A";
+
+/** Coerce a known-valid hex string to the branded HexColor type. */
+export const hex = (value: string): HexColor => value as HexColor;
+
+export const isValidHexColor = (color: string): color is HexColor => {
   return /^#([0-9A-F]{3}|[0-9A-F]{6})$/i.test(color);
 };
 
@@ -37,12 +46,12 @@ export const hexToRgb = (hex: string): Rgb | null => {
     : null;
 };
 
-export const rgbToHex = (r: number, g: number, b: number): string => {
+export const rgbToHex = (r: number, g: number, b: number): HexColor => {
   const toHex = (value: number) =>
     Math.max(0, Math.min(255, Math.round(value)))
       .toString(16)
       .padStart(2, "0");
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+  return hex(`#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase());
 };
 
 export const hexToHsl = (hex: string): Hsl | null => {
@@ -67,7 +76,7 @@ export const hexToHsl = (hex: string): Hsl | null => {
   return { h: Math.round(h), s: Math.round(s * 100), l: Math.round(l * 100) };
 };
 
-export const hslToHex = (h: number, s: number, l: number): string => {
+export const hslToHex = (h: number, s: number, l: number): HexColor => {
   const saturation = s / 100;
   const lightness = l / 100;
   const c = (1 - Math.abs(2 * lightness - 1)) * saturation;
@@ -98,7 +107,7 @@ export const hslToHex = (h: number, s: number, l: number): string => {
   return rgbToHex((r + m) * 255, (g + m) * 255, (b + m) * 255);
 };
 
-export const rotateHue = (hex: string, degrees: number): string => {
+export const rotateHue = (hex: HexColor, degrees: number): HexColor => {
   const hsl = hexToHsl(hex);
   if (!hsl) return hex;
   const h = (hsl.h + degrees + 360) % 360;
@@ -106,12 +115,12 @@ export const rotateHue = (hex: string, degrees: number): string => {
 };
 
 export interface ColorHarmony {
-  complementary: string;
-  analogous: string[];
-  triadic: string[];
+  complementary: HexColor;
+  analogous: HexColor[];
+  triadic: HexColor[];
 }
 
-export const getHarmony = (hex: string): ColorHarmony => ({
+export const getHarmony = (hex: HexColor): ColorHarmony => ({
   complementary: rotateHue(hex, 180),
   analogous: [rotateHue(hex, -30), rotateHue(hex, 30)],
   triadic: [rotateHue(hex, 120), rotateHue(hex, 240)],
@@ -138,6 +147,6 @@ export const getContrastRatio = (hexA: string, hexB: string): number => {
 };
 
 /** Returns the text color ("#FFFFFF" or a dark slate) that reads best on the given background. */
-export const getTextColor = (hex: string): string => {
+export const getTextColor = (hex: string): TextColor => {
   return getContrastRatio(hex, "#FFFFFF") >= 4.5 ? "#FFFFFF" : "#0F172A";
 };

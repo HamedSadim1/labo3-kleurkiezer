@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
 interface UseLocalStorageOptions<T> {
-  /** Turn the stored string back into a value. Defaults to JSON.parse. */
-  deserialize?: (raw: string) => T;
+  /** Turn the stored string back into a value. */
+  deserialize: (raw: string) => T;
   /** Turn the value into a string for storage. Defaults to JSON.stringify. */
   serialize?: (value: T) => string;
 }
@@ -26,9 +26,9 @@ export const serializeRaw = (value: string): string => value;
 const useLocalStorage = <T>(
   key: string,
   initialValue: T | (() => T),
-  options: UseLocalStorageOptions<T> = {},
+  options: UseLocalStorageOptions<T>,
 ): [T, React.Dispatch<React.SetStateAction<T>>] => {
-  const { deserialize = JSON.parse, serialize = JSON.stringify } = options;
+  const { deserialize, serialize = JSON.stringify } = options;
 
   const [value, setValue] = useState<T>(() => {
     try {

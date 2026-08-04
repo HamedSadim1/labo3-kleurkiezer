@@ -1,10 +1,10 @@
 import React, { useRef } from "react";
-import { hexToHsl, hslToHex } from "../utils/colorUtils";
+import { hexToHsl, hslToHex, type HexColor } from "../utils/colorUtils";
 import useLocalStorage, { serializeRaw } from "../hooks/useLocalStorage";
 
 interface HslPickerProps {
-  color: string;
-  onChange: (color: string) => void;
+  color: HexColor;
+  onChange: (color: HexColor) => void;
 }
 
 const WHEEL_SIZE = 176;

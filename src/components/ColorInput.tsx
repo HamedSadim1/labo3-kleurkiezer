@@ -4,12 +4,13 @@ import {
   rgbToHex,
   isValidHexColor,
   normalizeHex,
+  type HexColor,
 } from "../utils/colorUtils";
 
 interface ColorInputProps {
-  color: string;
-  onChange: (color: string) => void;
-  onCommit: (color: string) => void;
+  color: HexColor;
+  onChange: (color: HexColor) => void;
+  onCommit: (color: HexColor) => void;
 }
 
 const CHANNELS = [
@@ -26,7 +27,7 @@ const ColorInput: React.FC<ColorInputProps> = ({
   onCommit,
 }) => {
   // Draft pattern: while editing, show the draft; otherwise derive from the prop.
-  const [hexText, setHexText] = useState(color);
+  const [hexText, setHexText] = useState<string>(color);
   const [isEditing, setIsEditing] = useState(false);
   const [invalid, setInvalid] = useState(false);
   const rgb = hexToRgb(color) ?? { r: 0, g: 0, b: 0 };
@@ -98,7 +99,10 @@ const ColorInput: React.FC<ColorInputProps> = ({
           <input
             type="color"
             value={color}
-            onChange={(event) => onChange(event.target.value)}
+            onChange={(event) =>
+              // Browsers always emit a valid hex value from <input type="color">.
+              onChange(event.target.value as HexColor)
+            }
             className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
             aria-label="Open system color picker"
           />
