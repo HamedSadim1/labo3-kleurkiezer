@@ -1,16 +1,36 @@
 import React from "react";
+import {
+  SPHERE_GLOW_CLASS,
+  SPHERE_OVERLAY,
+  SPHERE_SHADOW,
+  SPHERE_SIZE,
+  type HexColor,
+} from "@/constants";
+import { cn } from "@/utils/cn";
 
 interface ColorDisplayProps {
-  color: string;
+  color: HexColor;
 }
 
 const ColorDisplay: React.FC<ColorDisplayProps> = ({ color }) => {
   return (
-    <div className="flex justify-center">
+    <div className={cn("relative mx-auto", SPHERE_SIZE)}>
+      {/* Ambient glow */}
       <div
-        className="w-32 h-32 rounded-full border-4 border-white/50 shadow-2xl animate-pulse"
+        className={cn("absolute", SPHERE_GLOW_CLASS)}
         style={{ backgroundColor: color }}
-      ></div>
+      />
+      {/* Glossy sphere */}
+      <div
+        className={cn(
+          "relative h-full w-full rounded-full border border-white/20 transition-colors duration-300",
+          SPHERE_SHADOW,
+        )}
+        style={{
+          backgroundColor: color,
+          backgroundImage: SPHERE_OVERLAY,
+        }}
+      />
     </div>
   );
 };

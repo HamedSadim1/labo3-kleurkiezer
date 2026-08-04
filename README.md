@@ -14,6 +14,9 @@ A modern, beautiful color picker application built with React, TypeScript, and T
 - **Copy to Clipboard**: One-click copying of hex color codes
 - **Responsive Design**: Works beautifully on all device sizes
 - **TypeScript**: Fully typed for better development experience
+- **HSL Color Wheel**: Select hue interactively with keyboard and pointer support
+- **Saturation/Lightness Plane**: Fine-tune saturation and lightness with visual corner hints
+- **Accurate Hue Rendering**: The wheel keeps its colors consistent all the way to the edge
 
 ## 🚀 Tech Stack
 
@@ -65,6 +68,11 @@ A modern, beautiful color picker application built with React, TypeScript, and T
 - **Recent Colors**: Click on previously used colors for quick selection
 - **Color Info**: View both hex and RGB representations
 
+## 📝 Recent UI Fixes
+
+- Fixed a visible color shift along the hue wheel's top, left, and right edges. The wheel now uses an outer outline instead of a translucent inner border, preventing the border from blending white into the gradient.
+- Hue transitions use OKLCH interpolation to keep intermediate colors vivid and smooth.
+
 ## 📜 Scripts
 
 - `npm run dev` - Start development server
@@ -80,7 +88,8 @@ A modern, beautiful color picker application built with React, TypeScript, and T
 
 - **Husky** - Git hooks. A `pre-commit` hook runs `lint-staged`, a `commit-msg` hook validates messages with `commitlint` (conventional commits, e.g. `feat: ...`, `fix: ...`).
 - **lint-staged** - Runs ESLint and Prettier only on staged files before each commit.
-- **ESLint** - Flat config with `typescript-eslint`, `eslint-plugin-react-hooks` and `eslint-plugin-react-refresh`.
+- **ESLint** - Flat config with `typescript-eslint`, `eslint-plugin-react-hooks` and `eslint-plugin-react-refresh`. The `no-restricted-imports` rule **forbids all relative imports** (`./` and `../`) — new code must use the `@/` alias (see below), and any violation fails `npm run lint` (and thus the pre-commit hook and CI).
+- **Path alias** - `@/...` imports map to the `src/` root (configured in `vite.config.ts` and `tsconfig.json` paths), so imports read `@/constants` instead of `../constants`.
 - **Prettier** - Code formatting, enforced in CI via `npm run format:check`.
 - **Commitlint** - Enforces Conventional Commits (types like `feat`, `fix`, `chore`).
 - **GitHub Actions** - CI pipeline (`lint`, `typecheck`, `format:check`, `build`) on every push/PR to `main`. A pull request template lives in `.github/pull_request_template.md`.
@@ -95,18 +104,41 @@ TypeScript 7 (native compiler) is installed under the `@typescript/native` alias
 src/
 ├── components/
 │   ├── AppLayout.tsx
-│   ├── ColorPicker.tsx
+│   ├── ColorDisplay.tsx
+│   ├── ColorHarmony.tsx
 │   ├── ColorInput.tsx
+│   ├── ColorPicker.tsx
 │   ├── ColorSelect.tsx
-│   └── ColorDisplay.tsx
-├── constants/
-│   └── colors.ts
+│   ├── ColorSwatch.tsx
+│   ├── ColorValues.tsx
+│   ├── ContrastChecker.tsx
+│   ├── HslPicker.tsx
+│   ├── HslSliderRow.tsx
+│   ├── HueWheel.tsx
+│   ├── IconButton.tsx
+│   ├── icons.tsx
+│   ├── Panel.tsx
+│   ├── SavedColors.tsx
+│   ├── SaturationLightnessPlane.tsx
+│   ├── SectionHeader.tsx
+│   └── SegmentedControl.tsx
+├── constants.ts
+├── copy.ts
+├── hooks/
+│   ├── useLocalStorage.ts
+│   └── useTimedReset.ts
 ├── utils/
-│   └── colorUtils.ts
-├── svg/
-│   └── ColorIcon.svg
+│   ├── clipboardUtils.ts
+│   ├── cn.ts
+│   ├── colorUtils.ts
+│   ├── contrastUtils.ts
+│   ├── keyboardUtils.ts
+│   ├── mathUtils.ts
+│   ├── pointerUtils.ts
+│   └── storageUtils.ts
 ├── App.tsx
 ├── main.tsx
+├── vite-env.d.ts
 └── index.css
 ```
 

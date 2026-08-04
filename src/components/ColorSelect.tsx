@@ -1,24 +1,55 @@
 import React from "react";
-import { COLOR_OPTIONS } from "../constants/colors";
+import { COLOR_OPTIONS, PALETTE_GRID_COLS, type HexColor } from "@/constants";
+import { COPY } from "@/copy";
+import { colorsEqual } from "@/utils/colorUtils";
+import { cn } from "@/utils/cn";
+import ColorSwatch from "@/components/ColorSwatch";
 
 interface ColorSelectProps {
-  color: string;
-  onChange: (color: string) => void;
+  color: HexColor;
+  onChange: (color: HexColor) => void;
 }
 
 const ColorSelect: React.FC<ColorSelectProps> = ({ color, onChange }) => {
+  const selectedName =
+    COLOR_OPTIONS.find((option) => colorsEqual(option.value, color))?.label ??
+    null;
+
   return (
-    <select
-      onChange={(e) => onChange(e.target.value)}
-      value={color}
-      className="w-full p-3 rounded-lg border-none bg-white/20 text-white text-base focus:outline-none focus:ring-2 focus:ring-white/50"
-    >
-      {COLOR_OPTIONS.map((option) => (
-        <option key={option.value} value={option.value} className="text-black">
-          {option.label}
-        </option>
-      ))}
-    </select>
+    <div className="space-y-3">
+      <div className={cn("grid gap-2.5", PALETTE_GRID_COLS)}>
+        {COLOR_OPTIONS.map((option) => {
+          const selected = colorsEqual(option.value, color);
+          return (
+            <ColorSwatch
+              key={option.value}
+              color={option.value}
+              label={COPY.palette.select(option.label)}
+              title={option.label}
+              selected={selected}
+              onClick={() => onChange(option.value)}
+              gloss
+              className={cn(
+                "aspect-square w-full rounded-xl",
+                selected ? "scale-110 hover:scale-110" : "hover:shadow-lg",
+              )}
+            >
+              {selected && (
+                <span
+                  className="absolute inset-0 flex items-center justify-center text-sm font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]"
+                  aria-hidden="true"
+                >
+                  ✓
+                </span>
+              )}
+            </ColorSwatch>
+          );
+        })}
+      </div>
+      <p className="h-4 text-xs font-medium text-white/50" aria-live="polite">
+        {selectedName ? COPY.palette.selected(selectedName) : ""}
+      </p>
+    </div>
   );
 };
 

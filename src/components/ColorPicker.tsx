@@ -1,94 +1,153 @@
-import React, { useState } from "react";
-import ColorInput from "./ColorInput";
-import ColorSelect from "./ColorSelect";
-import ColorDisplay from "./ColorDisplay";
-import { DEFAULT_COLOR } from "../constants/colors";
-import { hexToRgb } from "../utils/colorUtils";
+import React from "react";
+import ColorInput from "@/components/ColorInput";
+import ColorSelect from "@/components/ColorSelect";
+import HslPicker from "@/components/HslPicker";
+import ColorDisplay from "@/components/ColorDisplay";
+import ColorValues from "@/components/ColorValues";
+import ColorHarmony from "@/components/ColorHarmony";
+import ContrastChecker from "@/components/ContrastChecker";
+import SavedColors from "@/components/SavedColors";
+import ColorSwatch from "@/components/ColorSwatch";
+import Panel from "@/components/Panel";
+import { ClearButton } from "@/components/SectionHeader";
+import {
+  DEFAULT_COLOR,
+  MAX_RECENTS,
+  MAX_SAVED,
+  RECENT_SWATCH_SIZE,
+  RECENTS_KEY,
+  SAVED_KEY,
+  type HexColor,
+} from "@/constants";
+import { COPY } from "@/copy";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import {
+  colorsEqual,
+  parseHexArray,
+  prependUnique,
+  withoutColor,
+} from "@/utils/colorUtils";
+import { cn } from "@/utils/cn";
 
-const ColorPicker: React.FC = () => {
-  const [color, setColor] = useState(DEFAULT_COLOR);
-  const [recentColors, setRecentColors] = useState<string[]>([DEFAULT_COLOR]);
-  const [copied, setCopied] = useState(false);
+interface ColorPickerProps {
+  color: HexColor;
+  onChange: (color: HexColor) => void;
+}
 
-  const handleColorChange = (newColor: string) => {
-    setColor(newColor);
-    if (!recentColors.includes(newColor)) {
-      setRecentColors((prev) => [newColor, ...prev.slice(0, 4)]);
+const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
+  const [recentColors, setRecentColors] = useLocalStorage<HexColor[]>(
+    RECENTS_KEY,
+    [DEFAULT_COLOR],
+    {
+      deserialize: (raw) => {
+        const valid = parseHexArray(raw);
+        return valid?.length ? valid : [DEFAULT_COLOR];
+      },
+    },
+  );
+
+  const [savedColors, setSavedColors] = useLocalStorage<HexColor[]>(
+    SAVED_KEY,
+    [],
+    {
+      deserialize: (raw) => parseHexArray(raw) ?? [],
+    },
+  );
+
+  /**
+   * Sliders and the native picker fire continuously, so they call
+   * handleChange with commit=false to keep the recent list clean.
+   */
+  const handleChange = (nextColor: HexColor, commit = true) => {
+    onChange(nextColor);
+    if (commit) {
+      setRecentColors((prev) => prependUnique(prev, nextColor, MAX_RECENTS));
     }
   };
 
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(color);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Failed to copy: ", err);
-    }
-  };
+  const resetRecents = () => setRecentColors([color]);
 
-  const rgb = hexToRgb(color);
+  const saveColor = () => {
+    setSavedColors((prev) => prependUnique(prev, color, MAX_SAVED));
+  };
 
   return (
-    <div className="glass max-w-md mx-auto">
-      <h1 className="text-white text-3xl font-bold mb-6 text-center">
-        🎨 Color Picker
-      </h1>
-
-      <div className="space-y-4">
-        <div>
-          <label className="block text-white text-lg font-semibold mb-2">
-            Pick a Color:
-          </label>
-          <ColorInput color={color} onChange={handleColorChange} />
+    <div className="glass w-full max-w-4xl animate-fade-up">
+      <div className="grid gap-8 sm:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+        {/* Preview + values */}
+        <div className="flex flex-col items-center gap-6">
+          <ColorDisplay color={color} />
+          <ColorValues color={color} />
         </div>
 
-        <div>
-          <label className="block text-white text-lg font-semibold mb-2">
-            Choose from Palette:
-          </label>
-          <ColorSelect color={color} onChange={handleColorChange} />
+        {/* Inputs + palette */}
+        <div className="flex flex-col gap-6">
+          <Panel title={COPY.sections.pickColor}>
+            <ColorInput
+              color={color}
+              onChange={(next) => handleChange(next, false)}
+              onCommit={(next) => handleChange(next, true)}
+            />
+          </Panel>
+          <Panel title={COPY.sections.hslWheel}>
+            <HslPicker
+              color={color}
+              onChange={(next) => handleChange(next, false)}
+            />
+          </Panel>
+          <Panel title={COPY.sections.palette}>
+            <ColorSelect
+              color={color}
+              onChange={(next) => handleChange(next, true)}
+            />
+          </Panel>
         </div>
+      </div>
 
-        <ColorDisplay color={color} />
-
-        <div className="bg-white/10 rounded-lg p-4">
-          <h3 className="text-white font-semibold mb-2">Color Info:</h3>
-          <p className="text-white">
-            Hex: <span className="font-mono">{color.toUpperCase()}</span>
-          </p>
-          {rgb && (
-            <p className="text-white">
-              RGB:{" "}
-              <span className="font-mono">
-                rgb({rgb.r}, {rgb.g}, {rgb.b})
-              </span>
-            </p>
-          )}
-          <button
-            onClick={copyToClipboard}
-            className="mt-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg text-white font-semibold transition-colors"
-          >
-            {copied ? "Copied!" : "Copy Hex"}
-          </button>
-        </div>
-
-        {recentColors.length > 1 && (
-          <div>
-            <h3 className="text-white font-semibold mb-2">Recent Colors:</h3>
-            <div className="flex space-x-2">
-              {recentColors.slice(1).map((recentColor, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleColorChange(recentColor)}
-                  className="w-8 h-8 rounded-full border-2 border-white/50 shadow-lg hover:scale-110 transition-transform"
-                  style={{ backgroundColor: recentColor }}
-                  title={recentColor}
-                />
-              ))}
-            </div>
+      <div className="mt-8 grid gap-6 border-t border-white/10 pt-6 sm:grid-cols-2 lg:grid-cols-4">
+        <Panel title={COPY.sections.harmonies}>
+          <ColorHarmony
+            color={color}
+            onChange={(next) => handleChange(next, true)}
+          />
+        </Panel>
+        <Panel title={COPY.sections.contrast}>
+          <ContrastChecker color={color} />
+        </Panel>
+        <Panel
+          title={COPY.sections.recent}
+          action={
+            recentColors.length > 1 ? (
+              <ClearButton onClick={resetRecents} />
+            ) : undefined
+          }
+        >
+          <div className="flex flex-wrap gap-2.5">
+            {recentColors.map((recent) => (
+              <ColorSwatch
+                key={recent}
+                color={recent}
+                label={COPY.recent.select(recent.toUpperCase())}
+                selected={colorsEqual(recent, color)}
+                onClick={() => handleChange(recent, true)}
+                className={cn(
+                  RECENT_SWATCH_SIZE,
+                  colorsEqual(recent, color) && "ring-2 ring-white/30",
+                )}
+              />
+            ))}
           </div>
-        )}
+        </Panel>
+        <SavedColors
+          color={color}
+          saved={savedColors}
+          onSave={saveColor}
+          onSelect={(next) => handleChange(next, true)}
+          onRemove={(savedColor) =>
+            setSavedColors((prev) => withoutColor(prev, savedColor))
+          }
+          onClear={() => setSavedColors([])}
+        />
       </div>
     </div>
   );

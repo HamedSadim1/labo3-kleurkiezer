@@ -25,6 +25,24 @@ export default tseslint.config(
         "warn",
         { allowConstantExport: true },
       ],
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["./*", "../*", "../../*", "../../../*", "../../../../*"],
+              message:
+                "Relative imports are not allowed; use the '@/' path alias instead (e.g. '@/constants').",
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["scripts/**/*.mjs"],
+    languageOptions: {
+      globals: globals.node,
     },
   },
   eslintConfigPrettier,
