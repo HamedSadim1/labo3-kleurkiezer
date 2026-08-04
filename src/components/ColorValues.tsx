@@ -1,6 +1,6 @@
 import React from "react";
-import { hexToHsl } from "../utils/colorUtils";
-import useTimedReset from "../hooks/useTimedReset";
+import { hexToHsl } from "@/utils/colorUtils";
+import useTimedReset from "@/hooks/useTimedReset";
 import {
   COPY_BUTTON_SIZE,
   SURFACE_CARD,
@@ -10,11 +10,12 @@ import {
   VALUE_LABEL_WIDTH,
   hexToRgb,
   type HexColor,
-} from "../constants";
-import { copyToClipboard } from "../utils/clipboardUtils";
-import { COPY } from "../copy";
-import IconButton from "./IconButton";
-import { CheckIcon, CopyIcon } from "./icons";
+} from "@/constants";
+import { copyToClipboard } from "@/utils/clipboardUtils";
+import { COPY } from "@/copy";
+import { cn } from "@/utils/cn";
+import IconButton from "@/components/IconButton";
+import { CheckIcon, CopyIcon } from "@/components/icons";
 
 interface ColorValuesProps {
   color: HexColor;
@@ -51,10 +52,17 @@ const ColorValues: React.FC<ColorValuesProps> = ({ color }) => {
       {rows.map((row) => (
         <div
           key={row.key}
-          className={`flex items-center justify-between gap-3 rounded-xl border border-white/10 ${SURFACE_CARD} px-3 py-2.5`}
+          className={cn(
+            "flex items-center justify-between gap-3 rounded-xl border border-white/10 px-3 py-2.5",
+            SURFACE_CARD,
+          )}
         >
           <span
-            className={`${VALUE_LABEL_WIDTH} shrink-0 text-[10px] font-semibold uppercase tracking-widest ${TEXT_MUTED}`}
+            className={cn(
+              VALUE_LABEL_WIDTH,
+              "shrink-0 text-[10px] font-semibold uppercase tracking-widest",
+              TEXT_MUTED,
+            )}
           >
             {row.label}
           </span>
@@ -65,11 +73,18 @@ const ColorValues: React.FC<ColorValuesProps> = ({ color }) => {
             label={COPY.formats.copyValue(row.label)}
             title={COPY.formats.copyLabel(row.label)}
             onClick={() => copy(row.key, row.value)}
-            className={`${COPY_BUTTON_SIZE} rounded-lg ${
+            className={cn(
+              COPY_BUTTON_SIZE,
+              "rounded-lg",
               copied === row.key
                 ? "bg-emerald-400/20 text-emerald-300"
-                : `${SURFACE_RAISED} text-white/70 ${SURFACE_HOVER} hover:text-white`
-            }`}
+                : [
+                    SURFACE_RAISED,
+                    "text-white/70",
+                    SURFACE_HOVER,
+                    "hover:text-white",
+                  ],
+            )}
           >
             {copied === row.key ? <CheckIcon /> : <CopyIcon />}
           </IconButton>

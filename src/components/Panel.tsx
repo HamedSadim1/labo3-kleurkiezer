@@ -1,5 +1,5 @@
 import React from "react";
-import SectionHeader from "./SectionHeader";
+import SectionHeader from "@/components/SectionHeader";
 
 interface PanelProps {
   title: string;

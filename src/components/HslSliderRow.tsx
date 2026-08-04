@@ -1,5 +1,5 @@
 import React from "react";
-import { PERCENT_MAX } from "../constants";
+import { PERCENT_MAX } from "@/constants";
 
 interface HslSliderRowProps {
   label: string;

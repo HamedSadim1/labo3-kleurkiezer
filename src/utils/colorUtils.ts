@@ -1,4 +1,4 @@
-import { clamp } from "./mathUtils";
+import { clamp } from "@/utils/mathUtils";
 import {
   hex,
   hexToRgb,
@@ -23,7 +23,7 @@ import {
   type HexColor,
   type TextColor,
   type ContrastRating,
-} from "../constants";
+} from "@/constants";
 
 export interface Rgb {
   r: number;

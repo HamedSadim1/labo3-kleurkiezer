@@ -1,8 +1,9 @@
 import React from "react";
-import { COLOR_OPTIONS, PALETTE_GRID_COLS, type HexColor } from "../constants";
-import { COPY } from "../copy";
-import { colorsEqual } from "../utils/colorUtils";
-import ColorSwatch from "./ColorSwatch";
+import { COLOR_OPTIONS, PALETTE_GRID_COLS, type HexColor } from "@/constants";
+import { COPY } from "@/copy";
+import { colorsEqual } from "@/utils/colorUtils";
+import { cn } from "@/utils/cn";
+import ColorSwatch from "@/components/ColorSwatch";
 
 interface ColorSelectProps {
   color: HexColor;
@@ -16,7 +17,7 @@ const ColorSelect: React.FC<ColorSelectProps> = ({ color, onChange }) => {
 
   return (
     <div className="space-y-3">
-      <div className={`grid ${PALETTE_GRID_COLS} gap-2.5`}>
+      <div className={cn("grid gap-2.5", PALETTE_GRID_COLS)}>
         {COLOR_OPTIONS.map((option) => {
           const selected = colorsEqual(option.value, color);
           return (
@@ -28,9 +29,10 @@ const ColorSelect: React.FC<ColorSelectProps> = ({ color, onChange }) => {
               selected={selected}
               onClick={() => onChange(option.value)}
               gloss
-              className={`aspect-square w-full rounded-xl ${
-                selected ? "scale-110 hover:scale-110" : "hover:shadow-lg"
-              }`}
+              className={cn(
+                "aspect-square w-full rounded-xl",
+                selected ? "scale-110 hover:scale-110" : "hover:shadow-lg",
+              )}
             >
               {selected && (
                 <span

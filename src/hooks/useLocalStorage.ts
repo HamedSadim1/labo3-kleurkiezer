@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { resolveInitial } from "../utils/storageUtils";
+import { resolveInitial } from "@/utils/storageUtils";
 
 interface UseLocalStorageOptions<T> {
   /** Turn the stored string back into a value. */

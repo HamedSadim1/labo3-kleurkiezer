@@ -1,5 +1,5 @@
 import React from "react";
-import { colorsEqual } from "../utils/colorUtils";
+import { colorsEqual } from "@/utils/colorUtils";
 import {
   CONTROL_FOCUS_RING,
   REMOVE_BADGE_BG,
@@ -9,14 +9,15 @@ import {
   SURFACE_RAISED,
   TEXT_MUTED,
   type HexColor,
-} from "../constants";
-import { COPY } from "../copy";
-import useTimedReset from "../hooks/useTimedReset";
-import ColorSwatch from "./ColorSwatch";
-import IconButton from "./IconButton";
-import { BookmarkIcon } from "./icons";
-import Panel from "./Panel";
-import { ClearButton } from "./SectionHeader";
+} from "@/constants";
+import { COPY } from "@/copy";
+import useTimedReset from "@/hooks/useTimedReset";
+import { cn } from "@/utils/cn";
+import ColorSwatch from "@/components/ColorSwatch";
+import IconButton from "@/components/IconButton";
+import { BookmarkIcon } from "@/components/icons";
+import Panel from "@/components/Panel";
+import { ClearButton } from "@/components/SectionHeader";
 
 interface SavedColorsProps {
   color: HexColor;
@@ -53,11 +54,13 @@ const SavedColors: React.FC<SavedColorsProps> = ({
             type="button"
             onClick={handleSave}
             disabled={isSaved}
-            className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold transition-all ${CONTROL_FOCUS_RING} ${
+            className={cn(
+              "flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold transition-all disabled:cursor-default",
+              CONTROL_FOCUS_RING,
               isSaved || justSaved
                 ? "bg-emerald-400/20 text-emerald-300"
-                : `${SURFACE_RAISED} text-white/80 ${SURFACE_HOVER}`
-            } disabled:cursor-default`}
+                : [SURFACE_RAISED, "text-white/80", SURFACE_HOVER],
+            )}
           >
             <BookmarkIcon filled={isSaved || justSaved} />
             {isSaved || justSaved ? COPY.saved.saved : COPY.saved.save}
@@ -66,11 +69,11 @@ const SavedColors: React.FC<SavedColorsProps> = ({
       }
     >
       {saved.length === 0 ? (
-        <p className={`text-[11px] leading-relaxed ${TEXT_MUTED}`}>
+        <p className={cn("text-[11px] leading-relaxed", TEXT_MUTED)}>
           {COPY.saved.empty}
         </p>
       ) : (
-        <div className={`grid ${SAVED_GRID_COLS} gap-2.5`}>
+        <div className={cn("grid gap-2.5", SAVED_GRID_COLS)}>
           {saved.map((savedColor) => {
             const selected = colorsEqual(savedColor, color);
             return (
@@ -85,7 +88,10 @@ const SavedColors: React.FC<SavedColorsProps> = ({
                 <IconButton
                   label={COPY.saved.remove(savedColor.toUpperCase())}
                   onClick={() => onRemove(savedColor)}
-                  className={`absolute -right-1.5 -top-1.5 ${REMOVE_BADGE_SIZE} rounded-full border border-white/30 text-[10px] leading-none text-white/80 opacity-60 shadow hover:opacity-100 focus-visible:opacity-100 group-hover:opacity-100`}
+                  className={cn(
+                    "absolute -right-1.5 -top-1.5 rounded-full border border-white/30 text-[10px] leading-none text-white/80 opacity-60 shadow hover:opacity-100 focus-visible:opacity-100 group-hover:opacity-100",
+                    REMOVE_BADGE_SIZE,
+                  )}
                   style={{ backgroundColor: REMOVE_BADGE_BG }}
                 >
                   ×

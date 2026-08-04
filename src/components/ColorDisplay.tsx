@@ -5,7 +5,8 @@ import {
   SPHERE_SHADOW,
   SPHERE_SIZE,
   type HexColor,
-} from "../constants";
+} from "@/constants";
+import { cn } from "@/utils/cn";
 
 interface ColorDisplayProps {
   color: HexColor;
@@ -13,15 +14,18 @@ interface ColorDisplayProps {
 
 const ColorDisplay: React.FC<ColorDisplayProps> = ({ color }) => {
   return (
-    <div className={`relative mx-auto ${SPHERE_SIZE}`}>
+    <div className={cn("relative mx-auto", SPHERE_SIZE)}>
       {/* Ambient glow */}
       <div
-        className={`absolute ${SPHERE_GLOW_CLASS}`}
+        className={cn("absolute", SPHERE_GLOW_CLASS)}
         style={{ backgroundColor: color }}
       />
       {/* Glossy sphere */}
       <div
-        className={`relative h-full w-full rounded-full border border-white/20 ${SPHERE_SHADOW} transition-colors duration-300`}
+        className={cn(
+          "relative h-full w-full rounded-full border border-white/20 transition-colors duration-300",
+          SPHERE_SHADOW,
+        )}
         style={{
           backgroundColor: color,
           backgroundImage: SPHERE_OVERLAY,

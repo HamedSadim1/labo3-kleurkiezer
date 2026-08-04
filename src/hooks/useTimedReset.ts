@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { FEEDBACK_TIMEOUT_MS } from "../constants";
+import { FEEDBACK_TIMEOUT_MS } from "@/constants";
 
 /**
  * A state value that briefly switches to `next` and automatically resets back

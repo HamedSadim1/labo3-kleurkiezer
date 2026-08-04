@@ -1,12 +1,13 @@
 import React from "react";
-import { getHarmony } from "../utils/colorUtils";
+import { getHarmony } from "@/utils/colorUtils";
 import {
   HARMONY_LABEL_WIDTH,
   HARMONY_SWATCH_SIZE,
   type HexColor,
-} from "../constants";
-import { COPY } from "../copy";
-import ColorSwatch from "./ColorSwatch";
+} from "@/constants";
+import { COPY } from "@/copy";
+import { cn } from "@/utils/cn";
+import ColorSwatch from "@/components/ColorSwatch";
 
 interface ColorHarmonyProps {
   color: HexColor;
@@ -27,7 +28,10 @@ const ColorHarmony: React.FC<ColorHarmonyProps> = ({ color, onChange }) => {
       {groups.map((group) => (
         <div key={group.label} className="flex items-center justify-between">
           <span
-            className={`${HARMONY_LABEL_WIDTH} text-xs font-medium text-white/50`}
+            className={cn(
+              HARMONY_LABEL_WIDTH,
+              "text-xs font-medium text-white/50",
+            )}
           >
             {group.label}
           </span>
@@ -38,7 +42,7 @@ const ColorHarmony: React.FC<ColorHarmonyProps> = ({ color, onChange }) => {
                 color={harmonyColor}
                 label={COPY.harmony.select(harmonyColor.toUpperCase())}
                 onClick={() => onChange(harmonyColor)}
-                className={`${HARMONY_SWATCH_SIZE} rounded-full shadow`}
+                className={cn(HARMONY_SWATCH_SIZE, "rounded-full shadow")}
               />
             ))}
           </div>

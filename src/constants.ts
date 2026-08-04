@@ -1,5 +1,5 @@
-import { COPY } from "./copy";
-import type { Rgb } from "./utils/colorUtils";
+import { COPY } from "@/copy";
+import type { Rgb } from "@/utils/colorUtils";
 
 /* =====================================================================
  * Central constants — the single source of truth (SSOT) for every

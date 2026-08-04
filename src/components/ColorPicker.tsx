@@ -1,15 +1,15 @@
 import React from "react";
-import ColorInput from "./ColorInput";
-import ColorSelect from "./ColorSelect";
-import HslPicker from "./HslPicker";
-import ColorDisplay from "./ColorDisplay";
-import ColorValues from "./ColorValues";
-import ColorHarmony from "./ColorHarmony";
-import ContrastChecker from "./ContrastChecker";
-import SavedColors from "./SavedColors";
-import ColorSwatch from "./ColorSwatch";
-import Panel from "./Panel";
-import { ClearButton } from "./SectionHeader";
+import ColorInput from "@/components/ColorInput";
+import ColorSelect from "@/components/ColorSelect";
+import HslPicker from "@/components/HslPicker";
+import ColorDisplay from "@/components/ColorDisplay";
+import ColorValues from "@/components/ColorValues";
+import ColorHarmony from "@/components/ColorHarmony";
+import ContrastChecker from "@/components/ContrastChecker";
+import SavedColors from "@/components/SavedColors";
+import ColorSwatch from "@/components/ColorSwatch";
+import Panel from "@/components/Panel";
+import { ClearButton } from "@/components/SectionHeader";
 import {
   DEFAULT_COLOR,
   MAX_RECENTS,
@@ -18,15 +18,16 @@ import {
   RECENTS_KEY,
   SAVED_KEY,
   type HexColor,
-} from "../constants";
-import { COPY } from "../copy";
-import useLocalStorage from "../hooks/useLocalStorage";
+} from "@/constants";
+import { COPY } from "@/copy";
+import useLocalStorage from "@/hooks/useLocalStorage";
 import {
   colorsEqual,
   parseHexArray,
   prependUnique,
   withoutColor,
-} from "../utils/colorUtils";
+} from "@/utils/colorUtils";
+import { cn } from "@/utils/cn";
 
 interface ColorPickerProps {
   color: HexColor;
@@ -129,9 +130,10 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
                 label={COPY.recent.select(recent.toUpperCase())}
                 selected={colorsEqual(recent, color)}
                 onClick={() => handleChange(recent, true)}
-                className={`${RECENT_SWATCH_SIZE} ${
-                  colorsEqual(recent, color) ? "ring-2 ring-white/30" : ""
-                }`}
+                className={cn(
+                  RECENT_SWATCH_SIZE,
+                  colorsEqual(recent, color) && "ring-2 ring-white/30",
+                )}
               />
             ))}
           </div>

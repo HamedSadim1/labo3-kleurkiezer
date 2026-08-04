@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { saturationLightnessPlaneGradient } from "../utils/colorUtils";
+import { saturationLightnessPlaneGradient } from "@/utils/colorUtils";
 import {
   CONTROL_FOCUS_RING,
   CONTROL_SHADOW,
@@ -10,11 +10,12 @@ import {
   PLANE_KEY_STEP_FAST,
   PLANE_SIZE,
   type HexColor,
-} from "../constants";
-import { handlePointerDown, handlePointerMove } from "../utils/pointerUtils";
-import { getArrowKeyIntent } from "../utils/keyboardUtils";
-import { clamp } from "../utils/mathUtils";
-import { COPY } from "../copy";
+} from "@/constants";
+import { handlePointerDown, handlePointerMove } from "@/utils/pointerUtils";
+import { getArrowKeyIntent } from "@/utils/keyboardUtils";
+import { clamp } from "@/utils/mathUtils";
+import { cn } from "@/utils/cn";
+import { COPY } from "@/copy";
 
 interface SaturationLightnessPlaneProps {
   hue: number;
@@ -71,7 +72,11 @@ const SaturationLightnessPlane: React.FC<SaturationLightnessPlaneProps> = ({
       onPointerDown={(event) => handlePointerDown(event, updatePoint)}
       onPointerMove={(event) => handlePointerMove(event, updatePoint)}
       onKeyDown={handleKeyDown}
-      className={`relative cursor-crosshair touch-none rounded-2xl border border-white/20 ${CONTROL_SHADOW} outline-none ${CONTROL_FOCUS_RING}`}
+      className={cn(
+        "relative cursor-crosshair touch-none rounded-2xl border border-white/20 outline-none",
+        CONTROL_SHADOW,
+        CONTROL_FOCUS_RING,
+      )}
       style={{
         width: PLANE_SIZE,
         height: PLANE_SIZE,
@@ -80,7 +85,11 @@ const SaturationLightnessPlane: React.FC<SaturationLightnessPlaneProps> = ({
     >
       {/* Saturation / lightness marker (inset so it stays inside the rounded corners) */}
       <div
-        className={`absolute ${PICKER_MARKER_CLASS} shadow-[0_0_0_1px_rgba(0,0,0,0.6)]`}
+        className={cn(
+          "absolute",
+          PICKER_MARKER_CLASS,
+          "shadow-[0_0_0_1px_rgba(0,0,0,0.6)]",
+        )}
         style={{
           left: `${clamp(
             saturation,

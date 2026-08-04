@@ -81,6 +81,7 @@ A modern, beautiful color picker application built with React, TypeScript, and T
 - **Husky** - Git hooks. A `pre-commit` hook runs `lint-staged`, a `commit-msg` hook validates messages with `commitlint` (conventional commits, e.g. `feat: ...`, `fix: ...`).
 - **lint-staged** - Runs ESLint and Prettier only on staged files before each commit.
 - **ESLint** - Flat config with `typescript-eslint`, `eslint-plugin-react-hooks` and `eslint-plugin-react-refresh`.
+- **Path alias** - `@/...` imports map to the `src/` root (configured in `vite.config.ts` and `tsconfig.json` paths), so imports read `@/constants` instead of `../constants`.
 - **Prettier** - Code formatting, enforced in CI via `npm run format:check`.
 - **Commitlint** - Enforces Conventional Commits (types like `feat`, `fix`, `chore`).
 - **GitHub Actions** - CI pipeline (`lint`, `typecheck`, `format:check`, `build`) on every push/PR to `main`. A pull request template lives in `.github/pull_request_template.md`.
@@ -120,6 +121,7 @@ src/
 │   └── useTimedReset.ts
 ├── utils/
 │   ├── clipboardUtils.ts
+│   ├── cn.ts
 │   ├── colorUtils.ts
 │   ├── contrastUtils.ts
 │   ├── keyboardUtils.ts

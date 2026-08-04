@@ -4,7 +4,7 @@ import {
   hslToHex,
   lightnessGradient,
   saturationGradient,
-} from "../utils/colorUtils";
+} from "@/utils/colorUtils";
 import {
   DEFAULT_HSL,
   HUE_MAX,
@@ -14,14 +14,15 @@ import {
   isHslMode,
   type HslMode,
   type HexColor,
-} from "../constants";
-import { COPY } from "../copy";
-import useLocalStorage from "../hooks/useLocalStorage";
-import { serializeRaw } from "../utils/storageUtils";
-import HueWheel from "./HueWheel";
-import HslSliderRow from "./HslSliderRow";
-import SaturationLightnessPlane from "./SaturationLightnessPlane";
-import SegmentedControl from "./SegmentedControl";
+} from "@/constants";
+import { COPY } from "@/copy";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import { serializeRaw } from "@/utils/storageUtils";
+import { cn } from "@/utils/cn";
+import HueWheel from "@/components/HueWheel";
+import HslSliderRow from "@/components/HslSliderRow";
+import SaturationLightnessPlane from "@/components/SaturationLightnessPlane";
+import SegmentedControl from "@/components/SegmentedControl";
 
 interface HslPickerProps {
   color: HexColor;
@@ -50,7 +51,7 @@ const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
 
         {mode === "sliders" ? (
           /* Saturation + lightness sliders */
-          <div className={`flex ${SLIDER_COLUMN_WIDTH} flex-col gap-4`}>
+          <div className={cn("flex flex-col gap-4", SLIDER_COLUMN_WIDTH)}>
             <HslSliderRow
               label={COPY.hsl.labelS}
               value={hsl.s}

@@ -1,5 +1,5 @@
 import React from "react";
-import { ICON_SMALL_SIZE, ICON_STANDARD_SIZE } from "../constants";
+import { ICON_SMALL_SIZE, ICON_STANDARD_SIZE } from "@/constants";
 
 export const CopyIcon: React.FC = () => (
   <svg

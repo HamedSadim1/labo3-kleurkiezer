@@ -1,5 +1,5 @@
-import { getContrastRating } from "./colorUtils";
-import { RATING_CLASS, type ContrastRating } from "../constants";
+import { getContrastRating } from "@/utils/colorUtils";
+import { RATING_CLASS, type ContrastRating } from "@/constants";
 
 /** A WCAG rating badge together with the Tailwind class used to render it. */
 export interface RatingBadge {

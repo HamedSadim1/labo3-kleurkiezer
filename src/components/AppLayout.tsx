@@ -1,5 +1,5 @@
 import React from "react";
-import ColorPicker from "./ColorPicker";
+import ColorPicker from "@/components/ColorPicker";
 import {
   APP_BG,
   APP_BG_VIGNETTE,
@@ -11,11 +11,12 @@ import {
   SURFACE_CARD,
   TEXT_FAINT,
   type HexColor,
-} from "../constants";
-import useLocalStorage from "../hooks/useLocalStorage";
-import { serializeRaw } from "../utils/storageUtils";
-import { isValidHexColor } from "../utils/colorUtils";
-import { COPY } from "../copy";
+} from "@/constants";
+import useLocalStorage from "@/hooks/useLocalStorage";
+import { serializeRaw } from "@/utils/storageUtils";
+import { isValidHexColor } from "@/utils/colorUtils";
+import { cn } from "@/utils/cn";
+import { COPY } from "@/copy";
 
 const AppLayout: React.FC = () => {
   const [color, setColor] = useLocalStorage<HexColor>(
@@ -33,11 +34,11 @@ const AppLayout: React.FC = () => {
       <div className="pointer-events-none fixed inset-0 -z-10">
         <div className="absolute inset-0" style={{ backgroundColor: APP_BG }} />
         <div
-          className={`absolute ${BG_BLOB_PRIMARY}`}
+          className={cn("absolute", BG_BLOB_PRIMARY)}
           style={{ backgroundColor: color }}
         />
-        <div className={`absolute ${BG_BLOB_INDIGO}`} />
-        <div className={`absolute ${BG_BLOB_FUCHSIA}`} />
+        <div className={cn("absolute", BG_BLOB_INDIGO)} />
+        <div className={cn("absolute", BG_BLOB_FUCHSIA)} />
         <div
           className="absolute inset-0"
           style={{ backgroundImage: APP_BG_VIGNETTE }}
@@ -47,7 +48,10 @@ const AppLayout: React.FC = () => {
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center px-4 py-10 sm:py-16">
         <header className="mb-10 text-center">
           <div
-            className={`mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 ${SURFACE_CARD} px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-white/55 backdrop-blur`}
+            className={cn(
+              "mb-4 inline-flex items-center gap-2 rounded-full border border-white/10 px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-white/55 backdrop-blur",
+              SURFACE_CARD,
+            )}
           >
             <span
               className="h-2 w-2 rounded-full transition-colors duration-300"
@@ -70,7 +74,7 @@ const AppLayout: React.FC = () => {
           <ColorPicker color={color} onChange={setColor} />
         </main>
 
-        <footer className={`mt-12 text-center text-xs ${TEXT_FAINT}`}>
+        <footer className={cn("mt-12 text-center text-xs", TEXT_FAINT)}>
           {COPY.app.footer}
         </footer>
       </div>

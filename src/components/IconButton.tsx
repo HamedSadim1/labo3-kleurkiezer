@@ -1,5 +1,6 @@
 import React from "react";
-import { CONTROL_FOCUS_RING } from "../constants";
+import { CONTROL_FOCUS_RING } from "@/constants";
+import { cn } from "@/utils/cn";
 
 interface IconButtonProps {
   /** Accessible name (aria-label). */
@@ -30,7 +31,11 @@ const IconButton: React.FC<IconButtonProps> = ({
     onClick={onClick}
     aria-label={label}
     title={title ?? label}
-    className={`flex shrink-0 items-center justify-center transition-all ${CONTROL_FOCUS_RING} ${className}`}
+    className={cn(
+      "flex shrink-0 items-center justify-center transition-all",
+      CONTROL_FOCUS_RING,
+      className,
+    )}
     style={style}
   >
     {children}

@@ -1,5 +1,5 @@
 import type { PointerEvent as ReactPointerEvent } from "react";
-import { LEFT_BUTTON } from "../constants";
+import { LEFT_BUTTON } from "@/constants";
 
 type PointerUpdate = (clientX: number, clientY: number) => void;
 

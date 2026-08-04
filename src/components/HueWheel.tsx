@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { hslToHex } from "../utils/colorUtils";
+import { hslToHex } from "@/utils/colorUtils";
 import {
   CENTER_DOT_SIZE,
   CONTROL_FOCUS_RING,
@@ -17,10 +17,11 @@ import {
   WHEEL_GRADIENT,
   WHEEL_SIZE,
   type HexColor,
-} from "../constants";
-import { handlePointerDown, handlePointerMove } from "../utils/pointerUtils";
-import { getArrowKeyIntent } from "../utils/keyboardUtils";
-import { COPY } from "../copy";
+} from "@/constants";
+import { handlePointerDown, handlePointerMove } from "@/utils/pointerUtils";
+import { getArrowKeyIntent } from "@/utils/keyboardUtils";
+import { cn } from "@/utils/cn";
+import { COPY } from "@/copy";
 
 interface HueWheelProps {
   hue: number;
@@ -71,7 +72,11 @@ const HueWheel: React.FC<HueWheelProps> = ({ hue, color, onChange }) => {
       onPointerDown={(event) => handlePointerDown(event, updateHueFromPoint)}
       onPointerMove={(event) => handlePointerMove(event, updateHueFromPoint)}
       onKeyDown={handleKeyDown}
-      className={`relative cursor-crosshair touch-none rounded-full border border-white/20 ${CONTROL_SHADOW} outline-none ${CONTROL_FOCUS_RING}`}
+      className={cn(
+        "relative cursor-crosshair touch-none rounded-full border border-white/20 outline-none",
+        CONTROL_SHADOW,
+        CONTROL_FOCUS_RING,
+      )}
       style={{
         width: WHEEL_SIZE,
         height: WHEEL_SIZE,
@@ -80,7 +85,7 @@ const HueWheel: React.FC<HueWheelProps> = ({ hue, color, onChange }) => {
     >
       {/* Hue marker */}
       <div
-        className={`absolute ${PICKER_MARKER_CLASS} shadow-lg`}
+        className={cn("absolute", PICKER_MARKER_CLASS, "shadow-lg")}
         style={{
           left: `${markerLeft}%`,
           top: `${markerTop}%`,
@@ -89,7 +94,10 @@ const HueWheel: React.FC<HueWheelProps> = ({ hue, color, onChange }) => {
       />
       {/* Current color center dot */}
       <div
-        className={`absolute left-1/2 top-1/2 ${CENTER_DOT_SIZE} -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white/80 shadow-xl`}
+        className={cn(
+          "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white/80 shadow-xl",
+          CENTER_DOT_SIZE,
+        )}
         style={{ backgroundColor: color }}
       />
     </div>

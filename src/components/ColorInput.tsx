@@ -5,7 +5,7 @@ import {
   normalizeHex,
   glossOverlay,
   rgbSliderGradient,
-} from "../utils/colorUtils";
+} from "@/utils/colorUtils";
 import {
   CHANNELS,
   CHANNEL_LABEL_WIDTH,
@@ -20,8 +20,9 @@ import {
   hexToRgb,
   type ChannelKey,
   type HexColor,
-} from "../constants";
-import { COPY } from "../copy";
+} from "@/constants";
+import { COPY } from "@/copy";
+import { cn } from "@/utils/cn";
 
 interface ColorInputProps {
   color: HexColor;
@@ -113,7 +114,10 @@ const ColorInput: React.FC<ColorInputProps> = ({
       {/* Native picker + hex field */}
       <div className="flex items-center gap-3">
         <label
-          className={`relative block ${PICKER_SWATCH_SIZE} shrink-0 cursor-pointer overflow-hidden rounded-xl border border-white/20 shadow-lg transition-transform hover:scale-105 focus-within:ring-2 focus-within:ring-white/70`}
+          className={cn(
+            "relative block shrink-0 cursor-pointer overflow-hidden rounded-xl border border-white/20 shadow-lg transition-transform hover:scale-105 focus-within:ring-2 focus-within:ring-white/70",
+            PICKER_SWATCH_SIZE,
+          )}
           title={COPY.picker.openSystemPicker}
         >
           <input
@@ -137,7 +141,10 @@ const ColorInput: React.FC<ColorInputProps> = ({
 
         <form onSubmit={handleHexSubmit} className="flex-1">
           <div
-            className={`flex items-center gap-2 rounded-xl border border-white/15 ${SURFACE_CARD} px-3 focus-within:border-white/40`}
+            className={cn(
+              "flex items-center gap-2 rounded-xl border border-white/15 px-3 focus-within:border-white/40",
+              SURFACE_CARD,
+            )}
           >
             <span className={TEXT_MUTED}>#</span>
             <label htmlFor="hex-value" className="sr-only">
@@ -152,9 +159,10 @@ const ColorInput: React.FC<ColorInputProps> = ({
               onBlur={handleBlur}
               maxLength={HEX_DIGITS}
               spellCheck={false}
-              className={`w-full bg-transparent py-2.5 font-mono text-sm tracking-wider outline-none placeholder:text-white/40 ${
-                invalid ? "text-rose-300" : "text-white"
-              }`}
+              className={cn(
+                "w-full bg-transparent py-2.5 font-mono text-sm tracking-wider outline-none placeholder:text-white/40",
+                invalid ? "text-rose-300" : "text-white",
+              )}
               placeholder={DEFAULT_COLOR.replace(/^#/, "").toUpperCase()}
             />
           </div>
@@ -170,7 +178,10 @@ const ColorInput: React.FC<ColorInputProps> = ({
         {CHANNELS.map(({ key, label }) => (
           <div key={key} className="flex items-center gap-3">
             <span
-              className={`${CHANNEL_LABEL_WIDTH} text-xs font-bold text-white/50`}
+              className={cn(
+                CHANNEL_LABEL_WIDTH,
+                "text-xs font-bold text-white/50",
+              )}
             >
               {label}
             </span>
@@ -205,7 +216,11 @@ const ColorInput: React.FC<ColorInputProps> = ({
                   event.currentTarget.blur();
                 }
               }}
-              className={`${CHANNEL_NUMBER_WIDTH} rounded-lg border border-white/10 ${SURFACE_CARD} px-1.5 py-1 text-center font-mono text-xs text-white outline-none focus:border-white/40`}
+              className={cn(
+                CHANNEL_NUMBER_WIDTH,
+                "rounded-lg border border-white/10 px-1.5 py-1 text-center font-mono text-xs text-white outline-none focus:border-white/40",
+                SURFACE_CARD,
+              )}
               aria-label={COPY.picker.channelNumberValue(label)}
             />
           </div>

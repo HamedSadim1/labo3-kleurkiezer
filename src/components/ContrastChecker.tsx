@@ -1,6 +1,6 @@
 import React from "react";
-import { getContrastRatio, getTextColor } from "../utils/colorUtils";
-import { getRatingBadge } from "../utils/contrastUtils";
+import { getContrastRatio, getTextColor } from "@/utils/colorUtils";
+import { getRatingBadge } from "@/utils/contrastUtils";
 import {
   BADGE_BG_CLASS,
   CONTRAST_DECIMALS,
@@ -9,8 +9,9 @@ import {
   LIGHT_TEXT,
   TEXT_MUTED,
   type HexColor,
-} from "../constants";
-import { COPY } from "../copy";
+} from "@/constants";
+import { COPY } from "@/copy";
+import { cn } from "@/utils/cn";
 
 interface ContrastCheckerProps {
   color: HexColor;
@@ -37,7 +38,10 @@ const ContrastChecker: React.FC<ContrastCheckerProps> = ({ color }) => {
           style={{ backgroundColor: color }}
         >
           <span
-            className={`grid ${CONTRAST_SWATCH_SIZE} shrink-0 place-items-center rounded-lg text-base font-bold`}
+            className={cn(
+              "grid shrink-0 place-items-center rounded-lg text-base font-bold",
+              CONTRAST_SWATCH_SIZE,
+            )}
             style={{ backgroundColor: sample.text, color }}
             aria-hidden="true"
           >
@@ -60,14 +64,18 @@ const ContrastChecker: React.FC<ContrastCheckerProps> = ({ color }) => {
             </span>
           </span>
           <span
-            className={`shrink-0 rounded-full ${BADGE_BG_CLASS} px-2 py-0.5 text-[10px] font-bold ${sample.rating.className}`}
+            className={cn(
+              "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold",
+              BADGE_BG_CLASS,
+              sample.rating.className,
+            )}
           >
             {sample.rating.badge}
           </span>
         </div>
       ))}
 
-      <p className={`text-[11px] ${TEXT_MUTED}`}>
+      <p className={cn("text-[11px]", TEXT_MUTED)}>
         {COPY.contrast.recommended}{" "}
         <span className="font-mono text-white/70">
           {recommended === LIGHT_TEXT

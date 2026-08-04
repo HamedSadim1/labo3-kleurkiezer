@@ -1,6 +1,7 @@
 import React from "react";
-import { glossOverlay } from "../utils/colorUtils";
-import { type HexColor } from "../constants";
+import { glossOverlay } from "@/utils/colorUtils";
+import { type HexColor } from "@/constants";
+import { cn } from "@/utils/cn";
 
 interface ColorSwatchProps {
   color: HexColor;
@@ -33,9 +34,11 @@ const ColorSwatch: React.FC<ColorSwatchProps> = ({
     title={title}
     aria-label={label}
     aria-pressed={selected === undefined ? undefined : selected}
-    className={`relative border transition-all duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70 ${
-      selected ? "border-white shadow-lg" : "border-white/15"
-    } ${className}`}
+    className={cn(
+      "relative border transition-all duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70",
+      selected ? "border-white shadow-lg" : "border-white/15",
+      className,
+    )}
     style={{
       backgroundColor: color,
       backgroundImage: gloss ? glossOverlay() : undefined,
