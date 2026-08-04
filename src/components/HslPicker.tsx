@@ -1,5 +1,11 @@
 import React, { useRef } from "react";
-import { hexToHsl, hslToHex, type HexColor } from "../utils/colorUtils";
+import {
+  hexToHsl,
+  hslToHex,
+  HUE_MAX,
+  PERCENT_MAX,
+  type HexColor,
+} from "../utils/colorUtils";
 import useLocalStorage, { serializeRaw } from "../hooks/useLocalStorage";
 
 interface HslPickerProps {
@@ -47,8 +53,12 @@ const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
       raw === "sliders" || raw === "plane" ? raw : "sliders",
     serialize: serializeRaw,
   });
-  const hsl = hexToHsl(color) ?? { h: 0, s: 100, l: 50 };
-  const hue = hsl.h % 360;
+  const hsl = hexToHsl(color) ?? {
+    h: 0,
+    s: PERCENT_MAX,
+    l: PERCENT_MAX / 2,
+  };
+  const hue = hsl.h % HUE_MAX;
   const wheelRef = useRef<HTMLDivElement>(null);
   const planeRef = useRef<HTMLDivElement>(null);
 
@@ -61,7 +71,7 @@ const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
     const angle = (Math.atan2(clientY - cy, clientX - cx) * 180) / Math.PI;
-    const nextHue = (angle + 360) % 360;
+    const nextHue = (angle + HUE_MAX) % HUE_MAX;
     onChange(hslToHex(Math.round(nextHue), hsl.s, hsl.l));
   };
 
@@ -80,7 +90,7 @@ const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
       return;
     }
     event.preventDefault();
-    onChange(hslToHex((nextHue + 360) % 360, hsl.s, hsl.l));
+    onChange(hslToHex((nextHue + HUE_MAX) % HUE_MAX, hsl.s, hsl.l));
   };
 
   /* ----- 2D saturation / lightness plane ----- */
@@ -89,10 +99,10 @@ const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
     const el = planeRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    const xPct = ((clientX - rect.left) / rect.width) * 100;
-    const yPct = ((clientY - rect.top) / rect.height) * 100;
-    const s = Math.round(clamp(xPct, 0, 100));
-    const l = Math.round(clamp(100 - yPct, 0, 100));
+    const xPct = ((clientX - rect.left) / rect.width) * PERCENT_MAX;
+    const yPct = ((clientY - rect.top) / rect.height) * PERCENT_MAX;
+    const s = Math.round(clamp(xPct, 0, PERCENT_MAX));
+    const l = Math.round(clamp(PERCENT_MAX - yPct, 0, PERCENT_MAX));
     onChange(hslToHex(hue, s, l));
   };
 
@@ -100,16 +110,16 @@ const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
     const step = event.shiftKey ? 10 : 1;
     let s = hsl.s;
     let l = hsl.l;
-    if (event.key === "ArrowRight") s = clamp(s + step, 0, 100);
-    else if (event.key === "ArrowLeft") s = clamp(s - step, 0, 100);
-    else if (event.key === "ArrowUp") l = clamp(l + step, 0, 100);
-    else if (event.key === "ArrowDown") l = clamp(l - step, 0, 100);
+    if (event.key === "ArrowRight") s = clamp(s + step, 0, PERCENT_MAX);
+    else if (event.key === "ArrowLeft") s = clamp(s - step, 0, PERCENT_MAX);
+    else if (event.key === "ArrowUp") l = clamp(l + step, 0, PERCENT_MAX);
+    else if (event.key === "ArrowDown") l = clamp(l - step, 0, PERCENT_MAX);
     else if (event.key === "Home") {
       s = 0;
       l = 0;
     } else if (event.key === "End") {
-      s = 100;
-      l = 100;
+      s = PERCENT_MAX;
+      l = PERCENT_MAX;
     } else {
       return;
     }
@@ -177,7 +187,7 @@ const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
             style={{
               left: `${markerLeft}%`,
               top: `${markerTop}%`,
-              backgroundColor: hslToHex(hue, 100, 50),
+              backgroundColor: hslToHex(hue, PERCENT_MAX, PERCENT_MAX / 2),
             }}
           />
           {/* Current color center dot */}
@@ -197,7 +207,7 @@ const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
               <input
                 type="range"
                 min={0}
-                max={100}
+                max={PERCENT_MAX}
                 value={hsl.s}
                 onChange={(event) =>
                   onChange(hslToHex(hue, Number(event.target.value), hsl.l))
@@ -219,7 +229,7 @@ const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
               <input
                 type="range"
                 min={0}
-                max={100}
+                max={PERCENT_MAX}
                 value={hsl.l}
                 onChange={(event) =>
                   onChange(hslToHex(hue, hsl.s, Number(event.target.value)))
@@ -258,7 +268,7 @@ const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
               className="absolute h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white shadow-[0_0_0_1px_rgba(0,0,0,0.6)]"
               style={{
                 left: `${clamp(hsl.s, 5, 95)}%`,
-                top: `${clamp(100 - hsl.l, 5, 95)}%`,
+                top: `${clamp(PERCENT_MAX - hsl.l, 5, 95)}%`,
                 backgroundColor: color,
               }}
             />

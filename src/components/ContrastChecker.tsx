@@ -2,15 +2,17 @@ import React from "react";
 import {
   getContrastRatio,
   getTextColor,
+  DARK_TEXT,
+  LIGHT_TEXT,
+  MIN_CONTRAST_AA,
+  MIN_CONTRAST_AAA,
+  MIN_CONTRAST_LARGE,
   type HexColor,
 } from "../utils/colorUtils";
 
 interface ContrastCheckerProps {
   color: HexColor;
 }
-
-const LIGHT_TEXT = "#FFFFFF";
-const DARK_TEXT = "#0F172A";
 
 type RatingBadge = "AAA" | "AA" | "AA large" | "Fail";
 
@@ -20,9 +22,12 @@ interface Rating {
 }
 
 const getRating = (ratio: number): Rating => {
-  if (ratio >= 7) return { badge: "AAA", className: "text-emerald-300" };
-  if (ratio >= 4.5) return { badge: "AA", className: "text-emerald-300" };
-  if (ratio >= 3) return { badge: "AA large", className: "text-amber-300" };
+  if (ratio >= MIN_CONTRAST_AAA)
+    return { badge: "AAA", className: "text-emerald-300" };
+  if (ratio >= MIN_CONTRAST_AA)
+    return { badge: "AA", className: "text-emerald-300" };
+  if (ratio >= MIN_CONTRAST_LARGE)
+    return { badge: "AA large", className: "text-amber-300" };
   return { badge: "Fail", className: "text-rose-300" };
 };
 

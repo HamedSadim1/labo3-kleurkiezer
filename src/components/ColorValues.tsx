@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { hexToRgb, hexToHsl, type HexColor } from "../utils/colorUtils";
+import { FEEDBACK_TIMEOUT_MS } from "../constants/feedback";
 import { CheckIcon, CopyIcon } from "./icons";
 
 interface ColorValuesProps {
@@ -34,7 +35,7 @@ const ColorValues: React.FC<ColorValuesProps> = ({ color }) => {
       setCopied(key);
       window.setTimeout(() => {
         setCopied((current) => (current === key ? null : current));
-      }, 1500);
+      }, FEEDBACK_TIMEOUT_MS);
     } catch {
       // Clipboard unavailable — ignore silently.
     }

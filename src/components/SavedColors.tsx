@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { colorsEqual, type HexColor } from "../utils/colorUtils";
+import { FEEDBACK_TIMEOUT_MS } from "../constants/feedback";
 import { BookmarkIcon } from "./icons";
 import SectionHeader, { ClearButton } from "./SectionHeader";
 import ColorSwatch from "./ColorSwatch";
@@ -27,7 +28,7 @@ const SavedColors: React.FC<SavedColorsProps> = ({
   const handleSave = () => {
     onSave();
     setJustSaved(true);
-    window.setTimeout(() => setJustSaved(false), 1500);
+    window.setTimeout(() => setJustSaved(false), FEEDBACK_TIMEOUT_MS);
   };
 
   return (

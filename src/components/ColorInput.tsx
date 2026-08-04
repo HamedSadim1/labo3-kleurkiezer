@@ -5,6 +5,7 @@ import {
   isValidHexColor,
   normalizeHex,
   glossOverlay,
+  RGB_MAX,
   type HexColor,
 } from "../utils/colorUtils";
 
@@ -82,9 +83,9 @@ const ColorInput: React.FC<ColorInputProps> = ({
       channel === "b" ? 0 : rgb.b,
     ];
     const [rMax, gMax, bMax] = [
-      channel === "r" ? 255 : rgb.r,
-      channel === "g" ? 255 : rgb.g,
-      channel === "b" ? 255 : rgb.b,
+      channel === "r" ? RGB_MAX : rgb.r,
+      channel === "g" ? RGB_MAX : rgb.g,
+      channel === "b" ? RGB_MAX : rgb.b,
     ];
     return `linear-gradient(to right, rgb(${r}, ${g}, ${b}), rgb(${rMax}, ${gMax}, ${bMax}))`;
   };
@@ -154,7 +155,7 @@ const ColorInput: React.FC<ColorInputProps> = ({
             <input
               type="range"
               min={0}
-              max={255}
+              max={RGB_MAX}
               value={rgb[key]}
               onChange={(event) =>
                 handleSlider(key, Number(event.target.value))
@@ -166,7 +167,7 @@ const ColorInput: React.FC<ColorInputProps> = ({
             <input
               type="number"
               min={0}
-              max={255}
+              max={RGB_MAX}
               value={rgb[key]}
               onChange={(event) => {
                 const value = event.target.value;
