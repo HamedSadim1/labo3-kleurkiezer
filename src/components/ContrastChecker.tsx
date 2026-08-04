@@ -53,7 +53,7 @@ const ContrastChecker: React.FC<ContrastCheckerProps> = ({ color }) => {
                 : COPY.contrast.darkText}
             </span>
             <span
-              className="block text-[10px] opacity-80"
+              className="block font-mono text-[10px]"
               style={{ color: sample.text }}
             >
               {sample.ratio.toFixed(CONTRAST_DECIMALS)}:1
