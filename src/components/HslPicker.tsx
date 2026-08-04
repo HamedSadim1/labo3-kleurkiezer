@@ -22,6 +22,25 @@ const MODES: { id: HslMode; label: string }[] = [
 const clamp = (value: number, min: number, max: number) =>
   Math.min(max, Math.max(min, value));
 
+type PointerUpdate = (clientX: number, clientY: number) => void;
+
+/** Shared pointer-drag behavior for the hue wheel and the 2D plane. */
+const handlePointerDown = (
+  event: React.PointerEvent<HTMLDivElement>,
+  update: PointerUpdate,
+) => {
+  event.currentTarget.setPointerCapture(event.pointerId);
+  update(event.clientX, event.clientY);
+};
+
+const handlePointerMove = (
+  event: React.PointerEvent<HTMLDivElement>,
+  update: PointerUpdate,
+) => {
+  if (event.buttons !== 1) return;
+  update(event.clientX, event.clientY);
+};
+
 const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
   const [mode, setMode] = useLocalStorage<HslMode>(MODE_KEY, "sliders", {
     deserialize: (raw) =>
@@ -44,20 +63,6 @@ const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
     const angle = (Math.atan2(clientY - cy, clientX - cx) * 180) / Math.PI;
     const nextHue = (angle + 360) % 360;
     onChange(hslToHex(Math.round(nextHue), hsl.s, hsl.l));
-  };
-
-  const handleWheelPointerDown = (
-    event: React.PointerEvent<HTMLDivElement>,
-  ) => {
-    event.currentTarget.setPointerCapture(event.pointerId);
-    updateHueFromPoint(event.clientX, event.clientY);
-  };
-
-  const handleWheelPointerMove = (
-    event: React.PointerEvent<HTMLDivElement>,
-  ) => {
-    if (event.buttons !== 1) return;
-    updateHueFromPoint(event.clientX, event.clientY);
   };
 
   const handleWheelKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -89,20 +94,6 @@ const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
     const s = Math.round(clamp(xPct, 0, 100));
     const l = Math.round(clamp(100 - yPct, 0, 100));
     onChange(hslToHex(hue, s, l));
-  };
-
-  const handlePlanePointerDown = (
-    event: React.PointerEvent<HTMLDivElement>,
-  ) => {
-    event.currentTarget.setPointerCapture(event.pointerId);
-    updatePoint(event.clientX, event.clientY);
-  };
-
-  const handlePlanePointerMove = (
-    event: React.PointerEvent<HTMLDivElement>,
-  ) => {
-    if (event.buttons !== 1) return;
-    updatePoint(event.clientX, event.clientY);
   };
 
   const handlePlaneKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -165,8 +156,12 @@ const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
           aria-valuemax={359}
           aria-valuenow={hue}
           tabIndex={0}
-          onPointerDown={handleWheelPointerDown}
-          onPointerMove={handleWheelPointerMove}
+          onPointerDown={(event) =>
+            handlePointerDown(event, updateHueFromPoint)
+          }
+          onPointerMove={(event) =>
+            handlePointerMove(event, updateHueFromPoint)
+          }
           onKeyDown={handleWheelKeyDown}
           className="relative cursor-crosshair touch-none rounded-full border border-white/20 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)] outline-none focus-visible:ring-2 focus-visible:ring-white/70"
           style={{
@@ -248,8 +243,8 @@ const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
             aria-label="Saturation and lightness"
             aria-valuetext={`Saturation ${hsl.s}%, lightness ${hsl.l}%`}
             tabIndex={0}
-            onPointerDown={handlePlanePointerDown}
-            onPointerMove={handlePlanePointerMove}
+            onPointerDown={(event) => handlePointerDown(event, updatePoint)}
+            onPointerMove={(event) => handlePointerMove(event, updatePoint)}
             onKeyDown={handlePlaneKeyDown}
             className="relative cursor-crosshair touch-none rounded-2xl border border-white/20 shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)] outline-none focus-visible:ring-2 focus-visible:ring-white/70"
             style={{

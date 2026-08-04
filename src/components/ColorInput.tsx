@@ -4,6 +4,7 @@ import {
   rgbToHex,
   isValidHexColor,
   normalizeHex,
+  glossOverlay,
   type HexColor,
 } from "../utils/colorUtils";
 
@@ -110,8 +111,7 @@ const ColorInput: React.FC<ColorInputProps> = ({
             className="absolute inset-0"
             style={{
               backgroundColor: color,
-              backgroundImage:
-                "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.35), rgba(255,255,255,0) 60%)",
+              backgroundImage: glossOverlay(0.35),
             }}
           />
         </label>

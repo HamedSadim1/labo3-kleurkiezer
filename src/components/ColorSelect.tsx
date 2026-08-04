@@ -1,6 +1,7 @@
 import React from "react";
 import { COLOR_OPTIONS } from "../constants/colors";
-import { type HexColor } from "../utils/colorUtils";
+import { colorsEqual, type HexColor } from "../utils/colorUtils";
+import ColorSwatch from "./ColorSwatch";
 
 interface ColorSelectProps {
   color: HexColor;
@@ -9,33 +10,26 @@ interface ColorSelectProps {
 
 const ColorSelect: React.FC<ColorSelectProps> = ({ color, onChange }) => {
   const selectedName =
-    COLOR_OPTIONS.find(
-      (option) => option.value.toLowerCase() === color.toLowerCase(),
-    )?.label ?? null;
+    COLOR_OPTIONS.find((option) => colorsEqual(option.value, color))?.label ??
+    null;
 
   return (
     <div className="space-y-3">
       <div className="grid grid-cols-6 gap-2.5">
         {COLOR_OPTIONS.map((option) => {
-          const selected = option.value.toLowerCase() === color.toLowerCase();
+          const selected = colorsEqual(option.value, color);
           return (
-            <button
+            <ColorSwatch
               key={option.value}
-              type="button"
-              onClick={() => onChange(option.value)}
+              color={option.value}
+              label={`Select ${option.label}`}
               title={option.label}
-              aria-label={`Select ${option.label}`}
-              aria-pressed={selected}
-              className={`relative aspect-square w-full rounded-xl border transition-all duration-200 hover:scale-110 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70 ${
-                selected
-                  ? "scale-110 border-white shadow-lg"
-                  : "border-white/15"
+              selected={selected}
+              onClick={() => onChange(option.value)}
+              gloss
+              className={`aspect-square w-full rounded-xl ${
+                selected ? "scale-110 hover:scale-110" : "hover:shadow-lg"
               }`}
-              style={{
-                backgroundColor: option.value,
-                backgroundImage:
-                  "radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), rgba(255,255,255,0) 60%)",
-              }}
             >
               {selected && (
                 <span
@@ -45,7 +39,7 @@ const ColorSelect: React.FC<ColorSelectProps> = ({ color, onChange }) => {
                   ✓
                 </span>
               )}
-            </button>
+            </ColorSwatch>
           );
         })}
       </div>

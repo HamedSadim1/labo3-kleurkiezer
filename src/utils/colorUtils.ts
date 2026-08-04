@@ -23,6 +23,14 @@ export const isValidHexColor = (color: string): color is HexColor => {
   return /^#([0-9A-F]{3}|[0-9A-F]{6})$/i.test(color);
 };
 
+/** Case-insensitive comparison of two hex colors. */
+export const colorsEqual = (a: string, b: string): boolean =>
+  a.toLowerCase() === b.toLowerCase();
+
+/** Subtle glossy highlight overlay used on color swatches. */
+export const glossOverlay = (alpha = 0.25): string =>
+  `radial-gradient(circle at 30% 30%, rgba(255,255,255,${alpha}), rgba(255,255,255,0) 60%)`;
+
 /** Accepts "#fff", "#ffffff" or "fff" and returns a normalized "#RRGGBB". */
 export const normalizeHex = (color: string): string => {
   let hex = color.trim().replace(/^#/, "");

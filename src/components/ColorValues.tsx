@@ -1,40 +1,10 @@
 import React, { useState } from "react";
 import { hexToRgb, hexToHsl, type HexColor } from "../utils/colorUtils";
+import { CheckIcon, CopyIcon } from "./icons";
 
 interface ColorValuesProps {
   color: HexColor;
 }
-
-const CopyIcon: React.FC = () => (
-  <svg
-    className="h-3.5 w-3.5"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <rect x="9" y="9" width="13" height="13" rx="2" />
-    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-  </svg>
-);
-
-const CheckIcon: React.FC = () => (
-  <svg
-    className="h-3.5 w-3.5"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M20 6 9 17l-5-5" />
-  </svg>
-);
 
 type ValueKey = "hex" | "rgb" | "hsl";
 
@@ -75,7 +45,7 @@ const ColorValues: React.FC<ColorValuesProps> = ({ color }) => {
       {rows.map((row) => (
         <div
           key={row.key}
-          className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5"
+          className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.05] px-3 py-2.5"
         >
           <span className="w-10 shrink-0 text-[10px] font-semibold uppercase tracking-widest text-white/40">
             {row.label}

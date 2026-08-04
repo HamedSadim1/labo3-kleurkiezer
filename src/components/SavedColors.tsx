@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { type HexColor } from "../utils/colorUtils";
+import { colorsEqual, type HexColor } from "../utils/colorUtils";
+import { BookmarkIcon } from "./icons";
+import SectionHeader, { ClearButton } from "./SectionHeader";
+import ColorSwatch from "./ColorSwatch";
 
 interface SavedColorsProps {
   color: HexColor;
@@ -10,21 +13,6 @@ interface SavedColorsProps {
   onClear: () => void;
 }
 
-const BookmarkIcon: React.FC<{ filled?: boolean }> = ({ filled }) => (
-  <svg
-    className="h-3 w-3"
-    viewBox="0 0 24 24"
-    fill={filled ? "currentColor" : "none"}
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
-  </svg>
-);
-
 const SavedColors: React.FC<SavedColorsProps> = ({
   color,
   saved,
@@ -34,9 +22,7 @@ const SavedColors: React.FC<SavedColorsProps> = ({
   onClear,
 }) => {
   const [justSaved, setJustSaved] = useState(false);
-  const isSaved = saved.some(
-    (item) => item.toLowerCase() === color.toLowerCase(),
-  );
+  const isSaved = saved.some((item) => colorsEqual(item, color));
 
   const handleSave = () => {
     onSave();
@@ -46,35 +32,27 @@ const SavedColors: React.FC<SavedColorsProps> = ({
 
   return (
     <div>
-      <div className="mb-3 flex items-center justify-between gap-2">
-        <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
-          Saved
-        </h2>
-        <div className="flex items-center gap-1.5">
-          {saved.length > 1 && (
+      <SectionHeader
+        title="Saved"
+        action={
+          <div className="flex items-center gap-1.5">
+            {saved.length > 1 && <ClearButton onClick={onClear} />}
             <button
               type="button"
-              onClick={onClear}
-              className="text-[11px] font-medium text-white/40 underline-offset-2 transition-colors hover:text-white/80 hover:underline"
+              onClick={handleSave}
+              disabled={isSaved}
+              className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold transition-all ${
+                isSaved || justSaved
+                  ? "bg-emerald-400/20 text-emerald-300"
+                  : "bg-white/10 text-white/80 hover:bg-white/20"
+              } disabled:cursor-default`}
             >
-              Clear
+              <BookmarkIcon filled={isSaved || justSaved} />
+              {isSaved || justSaved ? "Saved" : "Save"}
             </button>
-          )}
-          <button
-            type="button"
-            onClick={handleSave}
-            disabled={isSaved}
-            className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold transition-all ${
-              isSaved || justSaved
-                ? "bg-emerald-400/20 text-emerald-300"
-                : "bg-white/10 text-white/80 hover:bg-white/20"
-            } disabled:cursor-default`}
-          >
-            <BookmarkIcon filled={isSaved || justSaved} />
-            {isSaved || justSaved ? "Saved" : "Save"}
-          </button>
-        </div>
-      </div>
+          </div>
+        }
+      />
 
       {saved.length === 0 ? (
         <p className="text-[11px] leading-relaxed text-white/40">
@@ -83,19 +61,15 @@ const SavedColors: React.FC<SavedColorsProps> = ({
       ) : (
         <div className="grid grid-cols-4 gap-2.5">
           {saved.map((savedColor) => {
-            const selected = savedColor.toLowerCase() === color.toLowerCase();
+            const selected = colorsEqual(savedColor, color);
             return (
               <div key={savedColor} className="group relative">
-                <button
-                  type="button"
+                <ColorSwatch
+                  color={savedColor}
+                  label={`Select saved color ${savedColor.toUpperCase()}`}
+                  selected={selected}
                   onClick={() => onSelect(savedColor)}
-                  title={savedColor.toUpperCase()}
-                  aria-label={`Select saved color ${savedColor.toUpperCase()}`}
-                  aria-pressed={selected}
-                  className={`aspect-square w-full rounded-lg border transition-all duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70 ${
-                    selected ? "border-white shadow-lg" : "border-white/15"
-                  }`}
-                  style={{ backgroundColor: savedColor }}
+                  className="aspect-square w-full rounded-lg"
                 />
                 <button
                   type="button"

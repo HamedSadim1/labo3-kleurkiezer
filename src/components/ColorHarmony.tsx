@@ -1,5 +1,6 @@
 import React from "react";
 import { getHarmony, type HexColor } from "../utils/colorUtils";
+import ColorSwatch from "./ColorSwatch";
 
 interface ColorHarmonyProps {
   color: HexColor;
@@ -24,14 +25,12 @@ const ColorHarmony: React.FC<ColorHarmonyProps> = ({ color, onChange }) => {
           </span>
           <div className="flex gap-2">
             {group.colors.map((harmonyColor) => (
-              <button
+              <ColorSwatch
                 key={harmonyColor}
-                type="button"
+                color={harmonyColor}
+                label={`Select harmony color ${harmonyColor.toUpperCase()}`}
                 onClick={() => onChange(harmonyColor)}
-                title={harmonyColor.toUpperCase()}
-                aria-label={`Select harmony color ${harmonyColor.toUpperCase()}`}
-                className="h-7 w-7 rounded-full border border-white/20 shadow transition-transform duration-200 hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/70"
-                style={{ backgroundColor: harmonyColor }}
+                className="h-7 w-7 rounded-full shadow"
               />
             ))}
           </div>
