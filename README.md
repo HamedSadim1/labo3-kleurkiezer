@@ -80,7 +80,7 @@ A modern, beautiful color picker application built with React, TypeScript, and T
 
 - **Husky** - Git hooks. A `pre-commit` hook runs `lint-staged`, a `commit-msg` hook validates messages with `commitlint` (conventional commits, e.g. `feat: ...`, `fix: ...`).
 - **lint-staged** - Runs ESLint and Prettier only on staged files before each commit.
-- **ESLint** - Flat config with `typescript-eslint`, `eslint-plugin-react-hooks` and `eslint-plugin-react-refresh`.
+- **ESLint** - Flat config with `typescript-eslint`, `eslint-plugin-react-hooks` and `eslint-plugin-react-refresh`. The `no-restricted-imports` rule **forbids all relative imports** (`./` and `../`) — new code must use the `@/` alias (see below), and any violation fails `npm run lint` (and thus the pre-commit hook and CI).
 - **Path alias** - `@/...` imports map to the `src/` root (configured in `vite.config.ts` and `tsconfig.json` paths), so imports read `@/constants` instead of `../constants`.
 - **Prettier** - Code formatting, enforced in CI via `npm run format:check`.
 - **Commitlint** - Enforces Conventional Commits (types like `feat`, `fix`, `chore`).
