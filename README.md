@@ -14,6 +14,9 @@ A modern, beautiful color picker application built with React, TypeScript, and T
 - **Copy to Clipboard**: One-click copying of hex color codes
 - **Responsive Design**: Works beautifully on all device sizes
 - **TypeScript**: Fully typed for better development experience
+- **HSL Color Wheel**: Select hue interactively with keyboard and pointer support
+- **Saturation/Lightness Plane**: Fine-tune saturation and lightness with visual corner hints
+- **Accurate Hue Rendering**: The wheel keeps its colors consistent all the way to the edge
 
 ## 🚀 Tech Stack
 
@@ -64,6 +67,11 @@ A modern, beautiful color picker application built with React, TypeScript, and T
 - **Copy Hex**: Click the "Copy Hex" button to copy the color code to clipboard
 - **Recent Colors**: Click on previously used colors for quick selection
 - **Color Info**: View both hex and RGB representations
+
+## 📝 Recent UI Fixes
+
+- Fixed a visible color shift along the hue wheel's top, left, and right edges. The wheel now uses an outer outline instead of a translucent inner border, preventing the border from blending white into the gradient.
+- Hue transitions use OKLCH interpolation to keep intermediate colors vivid and smooth.
 
 ## 📜 Scripts
 

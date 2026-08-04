@@ -73,7 +73,9 @@ const HueWheel: React.FC<HueWheelProps> = ({ hue, color, onChange }) => {
       onPointerMove={(event) => handlePointerMove(event, updateHueFromPoint)}
       onKeyDown={handleKeyDown}
       className={cn(
-        "relative cursor-crosshair touch-none rounded-full border border-white/20 outline-none",
+        // Keep the edge outside the gradient: a translucent border would blend
+        // white into the hue and create a different-looking strip per color.
+        "relative cursor-crosshair touch-none rounded-full outline outline-1 outline-white/20",
         CONTROL_SHADOW,
         CONTROL_FOCUS_RING,
       )}
@@ -83,9 +85,16 @@ const HueWheel: React.FC<HueWheelProps> = ({ hue, color, onChange }) => {
         background: WHEEL_GRADIENT,
       }}
     >
-      {/* Hue marker */}
+      {/* Hue marker — filled with the PURE hue at this position so it always agrees
+          with the wheel color behind it (red zone = red marker). The dark outline
+          keeps it visible as a deliberate selection ring on any hue. The S/L-diluted
+          current color is shown by the center dot, not here. */}
       <div
-        className={cn("absolute", PICKER_MARKER_CLASS, "shadow-lg")}
+        className={cn(
+          "absolute",
+          PICKER_MARKER_CLASS,
+          "shadow-[0_0_0_1px_rgba(0,0,0,0.5)]",
+        )}
         style={{
           left: `${markerLeft}%`,
           top: `${markerTop}%`,

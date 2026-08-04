@@ -127,9 +127,11 @@ export const FEEDBACK_TIMEOUT_MS: number = 1500;
 
 /* ----- Static gradients ----- */
 
-/** Hue-wheel conic gradient (pure CSS color keywords). */
+/** Hue-wheel conic gradient (pure CSS color keywords). Interpolated in the
+ * OKLCH color space so midpoints stay vivid and band-free — sRGB interpolation
+ * produces dark, muddy seams in the magenta→red arc (top of the wheel). */
 export const WHEEL_GRADIENT: string =
-  "conic-gradient(from 90deg, red, yellow, lime, cyan, blue, magenta, red)";
+  "conic-gradient(from 90deg in oklch, red, yellow, lime, cyan, blue, magenta, red)";
 
 /** Glossy highlight + ambient shadow overlay used on the main color sphere. */
 export const SPHERE_OVERLAY: string =
