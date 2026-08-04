@@ -5,6 +5,9 @@
   --font-sans: "Outfit", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
+  /* Keep in sync with APP_BG in src/constants.ts */
+  --color-app-bg: #070b18;
+
   --animate-drift: drift 18s ease-in-out infinite alternate;
   --animate-drift-slow: drift 26s ease-in-out infinite alternate-reverse;
   --animate-fade-up: fade-up 0.6s ease-out both;
@@ -35,7 +38,7 @@
 
 @layer base {
   body {
-    @apply m-0 min-h-screen bg-[#070b18] font-sans text-white antialiased;
+    @apply m-0 min-h-screen bg-app-bg font-sans text-white antialiased;
   }
 
   /* Custom range sliders: the track gradient is applied inline per channel */
@@ -106,6 +109,6 @@
 
 @layer components {
   .glass {
-    @apply rounded-3xl border border-white/10 bg-white/[0.06] p-5 shadow-[0_25px_80px_-20px_rgba(0,0,0,0.7)] backdrop-blur-2xl sm:p-8;
+    @apply rounded-3xl border border-white/10 bg-white/6 p-5 shadow-[0_25px_80px_-20px_rgba(0,0,0,0.7)] backdrop-blur-2xl sm:p-8;
   }
 }

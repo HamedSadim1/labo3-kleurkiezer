@@ -1,8 +1,9 @@
 import React from "react";
+import { ICON_SMALL_SIZE, ICON_STANDARD_SIZE } from "../constants";
 
 export const CopyIcon: React.FC = () => (
   <svg
-    className="h-3.5 w-3.5"
+    className={ICON_STANDARD_SIZE}
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -18,7 +19,7 @@ export const CopyIcon: React.FC = () => (
 
 export const CheckIcon: React.FC = () => (
   <svg
-    className="h-3.5 w-3.5"
+    className={ICON_STANDARD_SIZE}
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
@@ -33,7 +34,7 @@ export const CheckIcon: React.FC = () => (
 
 export const BookmarkIcon: React.FC<{ filled?: boolean }> = ({ filled }) => (
   <svg
-    className="h-3 w-3"
+    className={ICON_SMALL_SIZE}
     viewBox="0 0 24 24"
     fill={filled ? "currentColor" : "none"}
     stroke="currentColor"

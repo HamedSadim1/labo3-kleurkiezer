@@ -1,3 +1,5 @@
+import { clamp } from "./mathUtils";
+
 export interface Rgb {
   r: number;
   g: number;
@@ -77,9 +79,53 @@ export const prependUnique = (
 export const withoutColor = (list: HexColor[], color: HexColor): HexColor[] =>
   list.filter((item) => !colorsEqual(item, color));
 
+/** Parse a stored JSON array into valid hex colors, or null when it is not an array. */
+export const parseHexArray = (raw: string): HexColor[] | null => {
+  const parsed: unknown = JSON.parse(raw);
+  if (!Array.isArray(parsed)) return null;
+  return parsed.filter(
+    (item): item is HexColor =>
+      typeof item === "string" && isValidHexColor(item),
+  );
+};
+
 /** Subtle glossy highlight overlay used on color swatches. */
 export const glossOverlay = (alpha = 0.25): string =>
   `radial-gradient(circle at 30% 30%, rgba(255,255,255,${alpha}), rgba(255,255,255,0) 60%)`;
+
+/** Horizontal saturation gradient (0% → 100% saturation) at a given hue. */
+export const saturationGradient = (hue: number): string =>
+  `linear-gradient(to right, hsl(${hue}, 0%, ${PERCENT_MAX / 2}%), hsl(${hue}, 100%, ${PERCENT_MAX / 2}%))`;
+
+/** Convert "#RRGGBB" to an rgba() string ("" when the hex is invalid). */
+export const hexToRgba = (hexColor: string, alpha: number): string => {
+  const rgb = hexToRgb(hexColor);
+  if (!rgb) return "";
+  return `rgba(${rgb.r},${rgb.g},${rgb.b},${alpha})`;
+};
+
+/** Horizontal lightness gradient (0% → 100% lightness) at a given hue. */
+export const lightnessGradient = (hue: number): string =>
+  `linear-gradient(to right, hsl(${hue}, 100%, 0%), hsl(${hue}, 100%, ${PERCENT_MAX / 2}%), hsl(${hue}, 100%, 100%))`;
+
+/** Vertical white/black overlays + horizontal saturation for the 2D S/L plane. */
+export const saturationLightnessPlaneGradient = (hue: number): string =>
+  `linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0)), linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0)), ${saturationGradient(hue)}`;
+
+/** Horizontal RGB slider track gradient (0 → max) for a single channel. */
+export const rgbSliderGradient = (rgb: Rgb, channel: keyof Rgb): string => {
+  const [r, g, b] = [
+    channel === "r" ? 0 : rgb.r,
+    channel === "g" ? 0 : rgb.g,
+    channel === "b" ? 0 : rgb.b,
+  ];
+  const [rMax, gMax, bMax] = [
+    channel === "r" ? RGB_MAX : rgb.r,
+    channel === "g" ? RGB_MAX : rgb.g,
+    channel === "b" ? RGB_MAX : rgb.b,
+  ];
+  return `linear-gradient(to right, rgb(${r}, ${g}, ${b}), rgb(${rMax}, ${gMax}, ${bMax}))`;
+};
 
 /** Accepts "#fff", "#ffffff" or "fff" and returns a normalized "#RRGGBB". */
 export const normalizeHex = (color: string): string => {
@@ -106,9 +152,7 @@ export const hexToRgb = (hex: string): Rgb | null => {
 
 export const rgbToHex = (r: number, g: number, b: number): HexColor => {
   const toHex = (value: number) =>
-    Math.max(0, Math.min(RGB_MAX, Math.round(value)))
-      .toString(16)
-      .padStart(2, "0");
+    clamp(Math.round(value), 0, RGB_MAX).toString(16).padStart(2, "0");
   return hex(`#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase());
 };
 
@@ -215,4 +259,15 @@ export const getTextColor = (hex: string): TextColor => {
   return getContrastRatio(hex, LIGHT_TEXT) >= MIN_CONTRAST_AA
     ? LIGHT_TEXT
     : DARK_TEXT;
+};
+
+/** WCAG rating badges for a contrast ratio. */
+export type ContrastRating = "AAA" | "AA" | "AA large" | "Fail";
+
+/** Map a contrast ratio to its WCAG rating (see WCAG 2.1 contrast-minimum). */
+export const getContrastRating = (ratio: number): ContrastRating => {
+  if (ratio >= MIN_CONTRAST_AAA) return "AAA";
+  if (ratio >= MIN_CONTRAST_AA) return "AA";
+  if (ratio >= MIN_CONTRAST_LARGE) return "AA large";
+  return "Fail";
 };

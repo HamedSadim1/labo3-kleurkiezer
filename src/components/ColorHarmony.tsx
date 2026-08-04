@@ -1,5 +1,6 @@
 import React from "react";
 import { getHarmony, type HexColor } from "../utils/colorUtils";
+import { HARMONY_LABEL_WIDTH, HARMONY_SWATCH_SIZE } from "../constants";
 import ColorSwatch from "./ColorSwatch";
 
 interface ColorHarmonyProps {
@@ -20,7 +21,9 @@ const ColorHarmony: React.FC<ColorHarmonyProps> = ({ color, onChange }) => {
     <div className="space-y-3">
       {groups.map((group) => (
         <div key={group.label} className="flex items-center justify-between">
-          <span className="w-28 text-xs font-medium text-white/50">
+          <span
+            className={`${HARMONY_LABEL_WIDTH} text-xs font-medium text-white/50`}
+          >
             {group.label}
           </span>
           <div className="flex gap-2">
@@ -30,7 +33,7 @@ const ColorHarmony: React.FC<ColorHarmonyProps> = ({ color, onChange }) => {
                 color={harmonyColor}
                 label={`Select harmony color ${harmonyColor.toUpperCase()}`}
                 onClick={() => onChange(harmonyColor)}
-                className="h-7 w-7 rounded-full shadow"
+                className={`${HARMONY_SWATCH_SIZE} rounded-full shadow`}
               />
             ))}
           </div>

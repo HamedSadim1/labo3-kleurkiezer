@@ -4,38 +4,20 @@ import {
   getTextColor,
   DARK_TEXT,
   LIGHT_TEXT,
-  MIN_CONTRAST_AA,
-  MIN_CONTRAST_AAA,
-  MIN_CONTRAST_LARGE,
   type HexColor,
 } from "../utils/colorUtils";
+import { getRatingBadge } from "../utils/contrastUtils";
+import { CONTRAST_DECIMALS, CONTRAST_SWATCH_SIZE } from "../constants";
 
 interface ContrastCheckerProps {
   color: HexColor;
 }
 
-type RatingBadge = "AAA" | "AA" | "AA large" | "Fail";
-
-interface Rating {
-  badge: RatingBadge;
-  className: string;
-}
-
-const getRating = (ratio: number): Rating => {
-  if (ratio >= MIN_CONTRAST_AAA)
-    return { badge: "AAA", className: "text-emerald-300" };
-  if (ratio >= MIN_CONTRAST_AA)
-    return { badge: "AA", className: "text-emerald-300" };
-  if (ratio >= MIN_CONTRAST_LARGE)
-    return { badge: "AA large", className: "text-amber-300" };
-  return { badge: "Fail", className: "text-rose-300" };
-};
-
 const ContrastChecker: React.FC<ContrastCheckerProps> = ({ color }) => {
   const lightRatio = getContrastRatio(color, LIGHT_TEXT);
   const darkRatio = getContrastRatio(color, DARK_TEXT);
-  const lightRating = getRating(lightRatio);
-  const darkRating = getRating(darkRatio);
+  const lightRating = getRatingBadge(lightRatio);
+  const darkRating = getRatingBadge(darkRatio);
   const recommended = getTextColor(color);
 
   const samples = [
@@ -52,7 +34,7 @@ const ContrastChecker: React.FC<ContrastCheckerProps> = ({ color }) => {
           style={{ backgroundColor: color }}
         >
           <span
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-base font-bold"
+            className={`grid ${CONTRAST_SWATCH_SIZE} shrink-0 place-items-center rounded-lg text-base font-bold`}
             style={{ backgroundColor: sample.text, color }}
             aria-hidden="true"
           >
@@ -69,7 +51,7 @@ const ContrastChecker: React.FC<ContrastCheckerProps> = ({ color }) => {
               className="block text-[10px] opacity-80"
               style={{ color: sample.text }}
             >
-              {sample.ratio.toFixed(2)}:1
+              {sample.ratio.toFixed(CONTRAST_DECIMALS)}:1
             </span>
           </span>
           <span

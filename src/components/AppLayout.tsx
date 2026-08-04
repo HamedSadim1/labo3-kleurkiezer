@@ -1,10 +1,17 @@
 import React from "react";
 import ColorPicker from "./ColorPicker";
-import { DEFAULT_COLOR } from "../constants/colors";
-import useLocalStorage, { serializeRaw } from "../hooks/useLocalStorage";
+import {
+  APP_BG,
+  APP_BG_VIGNETTE,
+  BG_BLOB_FUCHSIA,
+  BG_BLOB_INDIGO,
+  BG_BLOB_PRIMARY,
+  COLOR_KEY,
+  DEFAULT_COLOR,
+} from "../constants";
+import useLocalStorage from "../hooks/useLocalStorage";
+import { serializeRaw } from "../utils/storageUtils";
 import { isValidHexColor, type HexColor } from "../utils/colorUtils";
-
-const COLOR_KEY = "color-studio-color";
 
 const AppLayout: React.FC = () => {
   const [color, setColor] = useLocalStorage<HexColor>(
@@ -20,14 +27,17 @@ const AppLayout: React.FC = () => {
     <div className="relative min-h-screen overflow-hidden text-white">
       {/* Animated, color-reactive background */}
       <div className="pointer-events-none fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-[#070b18]" />
+        <div className="absolute inset-0" style={{ backgroundColor: APP_BG }} />
         <div
-          className="absolute -left-40 -top-40 h-[36rem] w-[36rem] rounded-full opacity-25 blur-3xl transition-colors duration-700"
+          className={`absolute ${BG_BLOB_PRIMARY}`}
           style={{ backgroundColor: color }}
         />
-        <div className="absolute -right-32 top-1/4 h-[30rem] w-[30rem] rounded-full bg-indigo-600 opacity-20 blur-3xl animate-drift" />
-        <div className="absolute bottom-0 left-1/3 h-[26rem] w-[26rem] rounded-full bg-fuchsia-600 opacity-15 blur-3xl animate-drift-slow" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(7,11,24,0.7)_100%)]" />
+        <div className={`absolute ${BG_BLOB_INDIGO}`} />
+        <div className={`absolute ${BG_BLOB_FUCHSIA}`} />
+        <div
+          className="absolute inset-0"
+          style={{ backgroundImage: APP_BG_VIGNETTE }}
+        />
       </div>
 
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-5xl flex-col items-center px-4 py-10 sm:py-16">
@@ -41,7 +51,7 @@ const AppLayout: React.FC = () => {
           </div>
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl">
             Color{" "}
-            <span className="bg-gradient-to-r from-white via-white/85 to-white/40 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-white via-white/85 to-white/40 bg-clip-text text-transparent">
               Studio
             </span>
           </h1>

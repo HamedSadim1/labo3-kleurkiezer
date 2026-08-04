@@ -1,5 +1,5 @@
 import React from "react";
-import { COLOR_OPTIONS } from "../constants/colors";
+import { COLOR_OPTIONS, PALETTE_GRID_COLS } from "../constants";
 import { colorsEqual, type HexColor } from "../utils/colorUtils";
 import ColorSwatch from "./ColorSwatch";
 
@@ -15,7 +15,7 @@ const ColorSelect: React.FC<ColorSelectProps> = ({ color, onChange }) => {
 
   return (
     <div className="space-y-3">
-      <div className="grid grid-cols-6 gap-2.5">
+      <div className={`grid ${PALETTE_GRID_COLS} gap-2.5`}>
         {COLOR_OPTIONS.map((option) => {
           const selected = colorsEqual(option.value, color);
           return (

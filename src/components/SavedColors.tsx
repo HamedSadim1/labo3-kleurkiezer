@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { colorsEqual, type HexColor } from "../utils/colorUtils";
-import { FEEDBACK_TIMEOUT_MS } from "../constants/feedback";
+import {
+  REMOVE_BADGE_BG,
+  REMOVE_BADGE_SIZE,
+  SAVED_GRID_COLS,
+} from "../constants";
+import useTimedReset from "../hooks/useTimedReset";
 import { BookmarkIcon } from "./icons";
 import SectionHeader, { ClearButton } from "./SectionHeader";
 import ColorSwatch from "./ColorSwatch";
@@ -22,13 +27,12 @@ const SavedColors: React.FC<SavedColorsProps> = ({
   onRemove,
   onClear,
 }) => {
-  const [justSaved, setJustSaved] = useState(false);
+  const [justSaved, setJustSaved] = useTimedReset(false);
   const isSaved = saved.some((item) => colorsEqual(item, color));
 
   const handleSave = () => {
     onSave();
     setJustSaved(true);
-    window.setTimeout(() => setJustSaved(false), FEEDBACK_TIMEOUT_MS);
   };
 
   return (
@@ -60,7 +64,7 @@ const SavedColors: React.FC<SavedColorsProps> = ({
           Save your favorite colors to keep them at hand.
         </p>
       ) : (
-        <div className="grid grid-cols-4 gap-2.5">
+        <div className={`grid ${SAVED_GRID_COLS} gap-2.5`}>
           {saved.map((savedColor) => {
             const selected = colorsEqual(savedColor, color);
             return (
@@ -76,7 +80,8 @@ const SavedColors: React.FC<SavedColorsProps> = ({
                   type="button"
                   onClick={() => onRemove(savedColor)}
                   aria-label={`Remove saved color ${savedColor.toUpperCase()}`}
-                  className="absolute -right-1.5 -top-1.5 flex h-4 w-4 items-center justify-center rounded-full border border-white/30 bg-[#1a2035] text-[10px] leading-none text-white/80 opacity-60 shadow transition-opacity hover:opacity-100 focus-visible:opacity-100 group-hover:opacity-100"
+                  className={`absolute -right-1.5 -top-1.5 flex ${REMOVE_BADGE_SIZE} items-center justify-center rounded-full border border-white/30 text-[10px] leading-none text-white/80 opacity-60 shadow transition-opacity hover:opacity-100 focus-visible:opacity-100 group-hover:opacity-100`}
+                  style={{ backgroundColor: REMOVE_BADGE_BG }}
                 >
                   ×
                 </button>

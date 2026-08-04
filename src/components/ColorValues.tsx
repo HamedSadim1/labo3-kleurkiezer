@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { hexToRgb, hexToHsl, type HexColor } from "../utils/colorUtils";
-import { FEEDBACK_TIMEOUT_MS } from "../constants/feedback";
+import useTimedReset from "../hooks/useTimedReset";
+import { COPY_BUTTON_SIZE, VALUE_LABEL_WIDTH } from "../constants";
+import { copyToClipboard } from "../utils/clipboardUtils";
 import { CheckIcon, CopyIcon } from "./icons";
 
 interface ColorValuesProps {
@@ -10,7 +12,7 @@ interface ColorValuesProps {
 type ValueKey = "hex" | "rgb" | "hsl";
 
 const ColorValues: React.FC<ColorValuesProps> = ({ color }) => {
-  const [copied, setCopied] = useState<ValueKey | null>(null);
+  const [copied, setCopied] = useTimedReset<ValueKey | null>(null);
 
   const rgb = hexToRgb(color);
   const hsl = hexToHsl(color);
@@ -30,15 +32,7 @@ const ColorValues: React.FC<ColorValuesProps> = ({ color }) => {
   ];
 
   const copy = async (key: ValueKey, value: string) => {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopied(key);
-      window.setTimeout(() => {
-        setCopied((current) => (current === key ? null : current));
-      }, FEEDBACK_TIMEOUT_MS);
-    } catch {
-      // Clipboard unavailable — ignore silently.
-    }
+    if (await copyToClipboard(value)) setCopied(key);
   };
 
   return (
@@ -46,9 +40,11 @@ const ColorValues: React.FC<ColorValuesProps> = ({ color }) => {
       {rows.map((row) => (
         <div
           key={row.key}
-          className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.05] px-3 py-2.5"
+          className="flex items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/5 px-3 py-2.5"
         >
-          <span className="w-10 shrink-0 text-[10px] font-semibold uppercase tracking-widest text-white/40">
+          <span
+            className={`${VALUE_LABEL_WIDTH} shrink-0 text-[10px] font-semibold uppercase tracking-widest text-white/40`}
+          >
             {row.label}
           </span>
           <span className="min-w-0 flex-1 truncate text-right font-mono text-sm text-white/90">
@@ -57,7 +53,7 @@ const ColorValues: React.FC<ColorValuesProps> = ({ color }) => {
           <button
             type="button"
             onClick={() => copy(row.key, row.value)}
-            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-all ${
+            className={`flex ${COPY_BUTTON_SIZE} shrink-0 items-center justify-center rounded-lg transition-all ${
               copied === row.key
                 ? "bg-emerald-400/20 text-emerald-300"
                 : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"

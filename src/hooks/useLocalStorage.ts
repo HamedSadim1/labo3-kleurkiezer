@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { resolveInitial } from "../utils/storageUtils";
 
 interface UseLocalStorageOptions<T> {
   /** Turn the stored string back into a value. */
@@ -6,17 +7,6 @@ interface UseLocalStorageOptions<T> {
   /** Turn the value into a string for storage. Defaults to JSON.stringify. */
   serialize?: (value: T) => string;
 }
-
-const resolveInitial = <T>(initialValue: T | (() => T)): T =>
-  typeof initialValue === "function"
-    ? (initialValue as () => T)()
-    : initialValue;
-
-/**
- * Stable serializer for values stored as raw strings (no JSON wrapping).
- * Use it when the stored value is a plain string, e.g. `serialize: serializeRaw`.
- */
-export const serializeRaw = (value: string): string => value;
 
 /**
  * useState that stays in sync with localStorage.

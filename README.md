@@ -104,17 +104,28 @@ src/
 │   ├── ColorValues.tsx
 │   ├── ContrastChecker.tsx
 │   ├── HslPicker.tsx
+│   ├── HslSliderRow.tsx
+│   ├── HueWheel.tsx
 │   ├── icons.tsx
 │   ├── SavedColors.tsx
-│   └── SectionHeader.tsx
-├── constants/
-│   └── colors.ts
+│   ├── SaturationLightnessPlane.tsx
+│   ├── SectionHeader.tsx
+│   └── SegmentedControl.tsx
+├── constants.ts
 ├── hooks/
-│   └── useLocalStorage.ts
+│   ├── useLocalStorage.ts
+│   └── useTimedReset.ts
 ├── utils/
-│   └── colorUtils.ts
+│   ├── clipboardUtils.ts
+│   ├── colorUtils.ts
+│   ├── contrastUtils.ts
+│   ├── keyboardUtils.ts
+│   ├── mathUtils.ts
+│   ├── pointerUtils.ts
+│   └── storageUtils.ts
 ├── App.tsx
 ├── main.tsx
+├── vite-env.d.ts
 └── index.css
 ```
 

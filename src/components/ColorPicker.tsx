@@ -9,11 +9,18 @@ import ContrastChecker from "./ContrastChecker";
 import SavedColors from "./SavedColors";
 import ColorSwatch from "./ColorSwatch";
 import SectionHeader, { ClearButton } from "./SectionHeader";
-import { DEFAULT_COLOR } from "../constants/colors";
+import {
+  DEFAULT_COLOR,
+  MAX_RECENTS,
+  MAX_SAVED,
+  RECENT_SWATCH_SIZE,
+  RECENTS_KEY,
+  SAVED_KEY,
+} from "../constants";
 import useLocalStorage from "../hooks/useLocalStorage";
 import {
   colorsEqual,
-  isValidHexColor,
+  parseHexArray,
   prependUnique,
   withoutColor,
   type HexColor,
@@ -23,21 +30,6 @@ interface ColorPickerProps {
   color: HexColor;
   onChange: (color: HexColor) => void;
 }
-
-const RECENTS_KEY = "color-studio-recents";
-const MAX_RECENTS = 6;
-const SAVED_KEY = "color-studio-saved";
-const MAX_SAVED = 8;
-
-/** Parse a stored JSON array into valid hex colors, or null when it is not an array. */
-const parseHexArray = (raw: string): HexColor[] | null => {
-  const parsed: unknown = JSON.parse(raw);
-  if (!Array.isArray(parsed)) return null;
-  return parsed.filter(
-    (item): item is HexColor =>
-      typeof item === "string" && isValidHexColor(item),
-  );
-};
 
 const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
   const [recentColors, setRecentColors] = useLocalStorage<HexColor[]>(
@@ -141,7 +133,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
                 label={`Select recent color ${recent.toUpperCase()}`}
                 selected={colorsEqual(recent, color)}
                 onClick={() => handleChange(recent, true)}
-                className={`h-9 w-9 rounded-full ${
+                className={`${RECENT_SWATCH_SIZE} ${
                   colorsEqual(recent, color) ? "ring-2 ring-white/30" : ""
                 }`}
               />
