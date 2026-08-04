@@ -103,7 +103,6 @@ src/
 │   ├── ColorSwatch.tsx
 │   ├── ColorValues.tsx
 │   ├── ContrastChecker.tsx
-│   ├── ColorIcon.svg
 │   ├── HslPicker.tsx
 │   ├── icons.tsx
 │   ├── SavedColors.tsx

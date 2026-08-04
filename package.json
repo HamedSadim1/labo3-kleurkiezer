@@ -41,6 +41,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
+    "check:structure": "node scripts/check-structure.mjs",
     "prepare": "husky"
   }
 }
