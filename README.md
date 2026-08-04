@@ -95,16 +95,25 @@ TypeScript 7 (native compiler) is installed under the `@typescript/native` alias
 src/
 ├── components/
 │   ├── AppLayout.tsx
-│   ├── ColorPicker.tsx
+│   ├── ColorDisplay.tsx
+│   ├── ColorHarmony.tsx
 │   ├── ColorInput.tsx
+│   ├── ColorPicker.tsx
 │   ├── ColorSelect.tsx
-│   └── ColorDisplay.tsx
+│   ├── ColorSwatch.tsx
+│   ├── ColorValues.tsx
+│   ├── ContrastChecker.tsx
+│   ├── ColorIcon.svg
+│   ├── HslPicker.tsx
+│   ├── icons.tsx
+│   ├── SavedColors.tsx
+│   └── SectionHeader.tsx
 ├── constants/
 │   └── colors.ts
+├── hooks/
+│   └── useLocalStorage.ts
 ├── utils/
 │   └── colorUtils.ts
-├── svg/
-│   └── ColorIcon.svg
 ├── App.tsx
 ├── main.tsx
 └── index.css
