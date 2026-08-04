@@ -1,6 +1,7 @@
 import React from "react";
 import { getHarmony, type HexColor } from "../utils/colorUtils";
 import { HARMONY_LABEL_WIDTH, HARMONY_SWATCH_SIZE } from "../constants";
+import { COPY } from "../copy";
 import ColorSwatch from "./ColorSwatch";
 
 interface ColorHarmonyProps {
@@ -12,9 +13,9 @@ const ColorHarmony: React.FC<ColorHarmonyProps> = ({ color, onChange }) => {
   const harmony = getHarmony(color);
 
   const groups = [
-    { label: "Complementary", colors: [harmony.complementary] },
-    { label: "Analogous", colors: harmony.analogous },
-    { label: "Triadic", colors: harmony.triadic },
+    { label: COPY.harmony.complementary, colors: [harmony.complementary] },
+    { label: COPY.harmony.analogous, colors: harmony.analogous },
+    { label: COPY.harmony.triadic, colors: harmony.triadic },
   ];
 
   return (
@@ -31,7 +32,7 @@ const ColorHarmony: React.FC<ColorHarmonyProps> = ({ color, onChange }) => {
               <ColorSwatch
                 key={harmonyColor}
                 color={harmonyColor}
-                label={`Select harmony color ${harmonyColor.toUpperCase()}`}
+                label={COPY.harmony.select(harmonyColor.toUpperCase())}
                 onClick={() => onChange(harmonyColor)}
                 className={`${HARMONY_SWATCH_SIZE} rounded-full shadow`}
               />

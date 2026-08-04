@@ -1,5 +1,6 @@
 import React from "react";
 import { COLOR_OPTIONS, PALETTE_GRID_COLS } from "../constants";
+import { COPY } from "../copy";
 import { colorsEqual, type HexColor } from "../utils/colorUtils";
 import ColorSwatch from "./ColorSwatch";
 
@@ -22,7 +23,7 @@ const ColorSelect: React.FC<ColorSelectProps> = ({ color, onChange }) => {
             <ColorSwatch
               key={option.value}
               color={option.value}
-              label={`Select ${option.label}`}
+              label={COPY.palette.select(option.label)}
               title={option.label}
               selected={selected}
               onClick={() => onChange(option.value)}
@@ -44,7 +45,7 @@ const ColorSelect: React.FC<ColorSelectProps> = ({ color, onChange }) => {
         })}
       </div>
       <p className="h-4 text-xs font-medium text-white/50" aria-live="polite">
-        {selectedName ? `Selected: ${selectedName}` : ""}
+        {selectedName ? COPY.palette.selected(selectedName) : ""}
       </p>
     </div>
   );

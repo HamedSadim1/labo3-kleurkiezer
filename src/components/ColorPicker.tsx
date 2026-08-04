@@ -17,6 +17,7 @@ import {
   RECENTS_KEY,
   SAVED_KEY,
 } from "../constants";
+import { COPY } from "../copy";
 import useLocalStorage from "../hooks/useLocalStorage";
 import {
   colorsEqual,
@@ -80,7 +81,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
         {/* Inputs + palette */}
         <div className="flex flex-col gap-6">
           <section>
-            <SectionHeader title="Pick a color" />
+            <SectionHeader title={COPY.sections.pickColor} />
             <ColorInput
               color={color}
               onChange={(next) => handleChange(next, false)}
@@ -88,14 +89,14 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
             />
           </section>
           <section>
-            <SectionHeader title="HSL wheel" />
+            <SectionHeader title={COPY.sections.hslWheel} />
             <HslPicker
               color={color}
               onChange={(next) => handleChange(next, false)}
             />
           </section>
           <section>
-            <SectionHeader title="Palette" />
+            <SectionHeader title={COPY.sections.palette} />
             <ColorSelect
               color={color}
               onChange={(next) => handleChange(next, true)}
@@ -106,19 +107,19 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
 
       <div className="mt-8 grid gap-6 border-t border-white/10 pt-6 sm:grid-cols-2 lg:grid-cols-4">
         <section>
-          <SectionHeader title="Harmonies" />
+          <SectionHeader title={COPY.sections.harmonies} />
           <ColorHarmony
             color={color}
             onChange={(next) => handleChange(next, true)}
           />
         </section>
         <section>
-          <SectionHeader title="Contrast" />
+          <SectionHeader title={COPY.sections.contrast} />
           <ContrastChecker color={color} />
         </section>
         <section>
           <SectionHeader
-            title="Recent"
+            title={COPY.sections.recent}
             action={
               recentColors.length > 1 ? (
                 <ClearButton onClick={resetRecents} />
@@ -130,7 +131,7 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
               <ColorSwatch
                 key={recent}
                 color={recent}
-                label={`Select recent color ${recent.toUpperCase()}`}
+                label={COPY.recent.select(recent.toUpperCase())}
                 selected={colorsEqual(recent, color)}
                 onClick={() => handleChange(recent, true)}
                 className={`${RECENT_SWATCH_SIZE} ${

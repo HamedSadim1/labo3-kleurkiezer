@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import {
   saturationLightnessPlaneGradient,
-  PERCENT_MAX,
   type HexColor,
 } from "../utils/colorUtils";
 import {
@@ -9,6 +8,7 @@ import {
   CONTROL_SHADOW,
   KEY_STEP,
   MARKER_INSET,
+  PERCENT_MAX,
   PICKER_MARKER_CLASS,
   PLANE_KEY_STEP_FAST,
   PLANE_SIZE,
@@ -16,6 +16,7 @@ import {
 import { handlePointerDown, handlePointerMove } from "../utils/pointerUtils";
 import { getArrowKeyIntent } from "../utils/keyboardUtils";
 import { clamp } from "../utils/mathUtils";
+import { COPY } from "../copy";
 
 interface SaturationLightnessPlaneProps {
   hue: number;
@@ -66,8 +67,8 @@ const SaturationLightnessPlane: React.FC<SaturationLightnessPlaneProps> = ({
     <div
       ref={planeRef}
       role="slider"
-      aria-label="Saturation and lightness"
-      aria-valuetext={`Saturation ${saturation}%, lightness ${lightness}%`}
+      aria-label={COPY.hsl.saturationLightness}
+      aria-valuetext={COPY.hsl.valueText(saturation, lightness)}
       tabIndex={0}
       onPointerDown={(event) => handlePointerDown(event, updatePoint)}
       onPointerMove={(event) => handlePointerMove(event, updatePoint)}

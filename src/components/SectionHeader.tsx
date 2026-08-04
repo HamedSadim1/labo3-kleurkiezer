@@ -1,4 +1,5 @@
 import React from "react";
+import { COPY } from "../copy";
 
 interface SectionHeaderProps {
   title: string;
@@ -17,7 +18,7 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({ title, action }) => (
 
 export const ClearButton: React.FC<{ onClick: () => void; label?: string }> = ({
   onClick,
-  label = "Clear",
+  label = COPY.action.clear,
 }) => (
   <button
     type="button"

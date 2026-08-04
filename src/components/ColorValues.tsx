@@ -3,6 +3,7 @@ import { hexToRgb, hexToHsl, type HexColor } from "../utils/colorUtils";
 import useTimedReset from "../hooks/useTimedReset";
 import { COPY_BUTTON_SIZE, VALUE_LABEL_WIDTH } from "../constants";
 import { copyToClipboard } from "../utils/clipboardUtils";
+import { COPY } from "../copy";
 import { CheckIcon, CopyIcon } from "./icons";
 
 interface ColorValuesProps {
@@ -18,15 +19,15 @@ const ColorValues: React.FC<ColorValuesProps> = ({ color }) => {
   const hsl = hexToHsl(color);
 
   const rows: { key: ValueKey; label: string; value: string }[] = [
-    { key: "hex", label: "HEX", value: color.toUpperCase() },
+    { key: "hex", label: COPY.formats.hex, value: color.toUpperCase() },
     {
       key: "rgb",
-      label: "RGB",
+      label: COPY.formats.rgb,
       value: rgb ? `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` : "—",
     },
     {
       key: "hsl",
-      label: "HSL",
+      label: COPY.formats.hsl,
       value: hsl ? `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)` : "—",
     },
   ];
@@ -58,8 +59,8 @@ const ColorValues: React.FC<ColorValuesProps> = ({ color }) => {
                 ? "bg-emerald-400/20 text-emerald-300"
                 : "bg-white/10 text-white/70 hover:bg-white/20 hover:text-white"
             }`}
-            aria-label={`Copy ${row.label} value`}
-            title={`Copy ${row.label}`}
+            aria-label={COPY.formats.copyValue(row.label)}
+            title={COPY.formats.copyLabel(row.label)}
           >
             {copied === row.key ? <CheckIcon /> : <CopyIcon />}
           </button>

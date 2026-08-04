@@ -4,18 +4,19 @@ import {
   hslToHex,
   lightnessGradient,
   saturationGradient,
-  HUE_MAX,
-  PERCENT_MAX,
   type HexColor,
 } from "../utils/colorUtils";
 import {
+  HUE_MAX,
   LIGHTNESS_MID,
   MODE_KEY,
   MODES,
+  PERCENT_MAX,
   SLIDER_COLUMN_WIDTH,
   isHslMode,
   type HslMode,
 } from "../constants";
+import { COPY } from "../copy";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { serializeRaw } from "../utils/storageUtils";
 import HueWheel from "./HueWheel";
@@ -56,17 +57,17 @@ const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
           /* Saturation + lightness sliders */
           <div className={`flex ${SLIDER_COLUMN_WIDTH} flex-col gap-4`}>
             <HslSliderRow
-              label="S"
+              label={COPY.hsl.labelS}
               value={hsl.s}
               gradient={saturationGradient(hue)}
-              ariaLabel="Saturation"
+              ariaLabel={COPY.hsl.saturation}
               onChange={(value) => updatePoint(value, hsl.l)}
             />
             <HslSliderRow
-              label="L"
+              label={COPY.hsl.labelL}
               value={hsl.l}
               gradient={lightnessGradient(hue)}
-              ariaLabel="Lightness"
+              ariaLabel={COPY.hsl.lightness}
               onChange={(value) => updatePoint(hsl.s, value)}
             />
           </div>

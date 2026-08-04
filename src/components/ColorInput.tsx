@@ -6,7 +6,6 @@ import {
   normalizeHex,
   glossOverlay,
   rgbSliderGradient,
-  RGB_MAX,
   type HexColor,
 } from "../utils/colorUtils";
 import {
@@ -16,9 +15,11 @@ import {
   DEFAULT_COLOR,
   HEX_DIGITS,
   PICKER_SWATCH_SIZE,
+  RGB_MAX,
   SWATCH_GLOSS_ALPHA,
   type ChannelKey,
 } from "../constants";
+import { COPY } from "../copy";
 
 interface ColorInputProps {
   color: HexColor;
@@ -85,7 +86,7 @@ const ColorInput: React.FC<ColorInputProps> = ({
       <div className="flex items-center gap-3">
         <label
           className={`relative block ${PICKER_SWATCH_SIZE} shrink-0 cursor-pointer overflow-hidden rounded-xl border border-white/20 shadow-lg transition-transform hover:scale-105`}
-          title="Open system color picker"
+          title={COPY.picker.openSystemPicker}
         >
           <input
             type="color"
@@ -95,7 +96,7 @@ const ColorInput: React.FC<ColorInputProps> = ({
               onChange(event.target.value as HexColor)
             }
             className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-            aria-label="Open system color picker"
+            aria-label={COPY.picker.openSystemPicker}
           />
           <span
             className="absolute inset-0"
@@ -110,7 +111,7 @@ const ColorInput: React.FC<ColorInputProps> = ({
           <div className="flex items-center gap-2 rounded-xl border border-white/15 bg-white/6 px-3 focus-within:border-white/40">
             <span className="text-white/40">#</span>
             <label htmlFor="hex-value" className="sr-only">
-              Hex color value
+              {COPY.picker.hexValueLabel}
             </label>
             <input
               id="hex-value"
@@ -131,9 +132,7 @@ const ColorInput: React.FC<ColorInputProps> = ({
       </div>
 
       {invalid && (
-        <p className="text-xs text-rose-300">
-          Invalid hex code — use 3 or 6 hex digits (e.g. #667EEA).
-        </p>
+        <p className="text-xs text-rose-300">{COPY.picker.invalidHex}</p>
       )}
 
       {/* RGB sliders */}
@@ -155,7 +154,7 @@ const ColorInput: React.FC<ColorInputProps> = ({
               }
               className="flex-1"
               style={{ background: rgbSliderGradient(rgb, key) }}
-              aria-label={`${label} channel value`}
+              aria-label={COPY.picker.channelValue(label)}
             />
             <input
               type="number"
@@ -169,7 +168,7 @@ const ColorInput: React.FC<ColorInputProps> = ({
                 if (!Number.isNaN(num)) handleSlider(key, num);
               }}
               className={`${CHANNEL_NUMBER_WIDTH} rounded-lg border border-white/10 bg-white/6 px-1.5 py-1 text-center font-mono text-xs text-white outline-none focus:border-white/40`}
-              aria-label={`${label} channel number value`}
+              aria-label={COPY.picker.channelNumberValue(label)}
             />
           </div>
         ))}

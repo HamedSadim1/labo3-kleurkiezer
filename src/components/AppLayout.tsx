@@ -12,6 +12,7 @@ import {
 import useLocalStorage from "../hooks/useLocalStorage";
 import { serializeRaw } from "../utils/storageUtils";
 import { isValidHexColor, type HexColor } from "../utils/colorUtils";
+import { COPY } from "../copy";
 
 const AppLayout: React.FC = () => {
   const [color, setColor] = useLocalStorage<HexColor>(
@@ -47,23 +48,23 @@ const AppLayout: React.FC = () => {
               className="h-2 w-2 rounded-full transition-colors duration-300"
               style={{ backgroundColor: color }}
             />
-            Web Frameworks · Lab 3
+            {COPY.app.badge}
           </div>
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl">
-            Color{" "}
+            {COPY.app.title}{" "}
             <span className="bg-linear-to-r from-white via-white/85 to-white/40 bg-clip-text text-transparent">
-              Studio
+              {COPY.app.titleAccent}
             </span>
           </h1>
           <p className="mx-auto mt-3 max-w-md text-sm text-white/50 sm:text-base">
-            Pick, refine and copy colors in a modern glass interface.
+            {COPY.app.tagline}
           </p>
         </header>
 
         <ColorPicker color={color} onChange={setColor} />
 
         <footer className="mt-12 text-center text-xs text-white/30">
-          Built with React 19 · Vite 8 · Tailwind CSS 4
+          {COPY.app.footer}
         </footer>
       </div>
     </div>

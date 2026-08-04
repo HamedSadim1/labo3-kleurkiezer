@@ -1,7 +1,5 @@
-import { getContrastRating, type ContrastRating } from "./colorUtils";
-// The badge styling classes live in the constants SSOT, so this module
-// depends on ../constants (constants never imports back — no cycle).
-import { RATING_CLASS } from "../constants";
+import { getContrastRating } from "./colorUtils";
+import { RATING_CLASS, type ContrastRating } from "../constants";
 
 /** A WCAG rating badge together with the Tailwind class used to render it. */
 export interface RatingBadge {

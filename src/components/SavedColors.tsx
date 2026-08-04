@@ -5,6 +5,7 @@ import {
   REMOVE_BADGE_SIZE,
   SAVED_GRID_COLS,
 } from "../constants";
+import { COPY } from "../copy";
 import useTimedReset from "../hooks/useTimedReset";
 import { BookmarkIcon } from "./icons";
 import SectionHeader, { ClearButton } from "./SectionHeader";
@@ -38,7 +39,7 @@ const SavedColors: React.FC<SavedColorsProps> = ({
   return (
     <div>
       <SectionHeader
-        title="Saved"
+        title={COPY.sections.saved}
         action={
           <div className="flex items-center gap-1.5">
             {saved.length > 1 && <ClearButton onClick={onClear} />}
@@ -53,7 +54,7 @@ const SavedColors: React.FC<SavedColorsProps> = ({
               } disabled:cursor-default`}
             >
               <BookmarkIcon filled={isSaved || justSaved} />
-              {isSaved || justSaved ? "Saved" : "Save"}
+              {isSaved || justSaved ? COPY.saved.saved : COPY.saved.save}
             </button>
           </div>
         }
@@ -61,7 +62,7 @@ const SavedColors: React.FC<SavedColorsProps> = ({
 
       {saved.length === 0 ? (
         <p className="text-[11px] leading-relaxed text-white/40">
-          Save your favorite colors to keep them at hand.
+          {COPY.saved.empty}
         </p>
       ) : (
         <div className={`grid ${SAVED_GRID_COLS} gap-2.5`}>
@@ -71,7 +72,7 @@ const SavedColors: React.FC<SavedColorsProps> = ({
               <div key={savedColor} className="group relative">
                 <ColorSwatch
                   color={savedColor}
-                  label={`Select saved color ${savedColor.toUpperCase()}`}
+                  label={COPY.saved.select(savedColor.toUpperCase())}
                   selected={selected}
                   onClick={() => onSelect(savedColor)}
                   className="aspect-square w-full rounded-lg"
@@ -79,7 +80,7 @@ const SavedColors: React.FC<SavedColorsProps> = ({
                 <button
                   type="button"
                   onClick={() => onRemove(savedColor)}
-                  aria-label={`Remove saved color ${savedColor.toUpperCase()}`}
+                  aria-label={COPY.saved.remove(savedColor.toUpperCase())}
                   className={`absolute -right-1.5 -top-1.5 flex ${REMOVE_BADGE_SIZE} items-center justify-center rounded-full border border-white/30 text-[10px] leading-none text-white/80 opacity-60 shadow transition-opacity hover:opacity-100 focus-visible:opacity-100 group-hover:opacity-100`}
                   style={{ backgroundColor: REMOVE_BADGE_BG }}
                 >

@@ -1,20 +1,86 @@
-import {
-  hex,
-  hexToRgba,
-  PERCENT_MAX,
-  type ContrastRating,
-  type HexColor,
-} from "./utils/colorUtils";
+import { COPY } from "./copy";
+import type { Rgb } from "./utils/colorUtils";
 
 /* =====================================================================
  * Central constants — the single source of truth (SSOT) for every
  * hardcoded constant and magic value used across the app.
  *
  * Grouped by concern; each section is described under its banner.
+ * The tiny hex helpers (hex, hexToRgb, hexToRgba) live here so the color
+ * constants can be declared without a runtime dependency on colorUtils.
  * Dynamic gradient builders (glossOverlay, saturationGradient,
  * lightnessGradient, ...) intentionally stay in utils/colorUtils.ts
  * because they derive their output from color-domain values.
  * ===================================================================== */
+
+/* ----- Color domain ----- */
+
+/** A normalized "#RRGGBB" hex color string. */
+export type HexColor = string & { readonly __brand: "HexColor" };
+
+/** Coerce a known-valid hex string to the branded HexColor type. */
+export const hex = (value: string): HexColor => value as HexColor;
+
+/** Parse a "#RRGGBB" hex color into its RGB channels, or null when invalid. */
+export const hexToRgb = (hexColor: string): Rgb | null => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hexColor);
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null;
+};
+
+/** Convert "#RRGGBB" to an rgba() string ("" when the hex is invalid). */
+export const hexToRgba = (hexColor: string, alpha: number): string => {
+  const rgb = hexToRgb(hexColor);
+  if (!rgb) return "";
+  return `rgba(${rgb.r},${rgb.g},${rgb.b},${alpha})`;
+};
+
+/** Max byte value of a single RGB channel. */
+export const RGB_MAX: number = 255;
+
+/** Full 360° hue circle in degrees. */
+export const HUE_MAX: number = 360;
+
+/** Width of one hue segment (60° per primary/secondary transition). */
+export const HUE_SEGMENT: number = 60;
+
+/** Saturation/lightness percentage scale (0–100). */
+export const PERCENT_MAX: number = 100;
+
+/** White text — highest contrast on dark backgrounds. */
+export const LIGHT_TEXT = "#FFFFFF";
+
+/** Dark-slate text — highest contrast on light backgrounds. */
+export const DARK_TEXT = "#0F172A";
+
+/** The two text colors that always read well on any background. */
+export type TextColor = typeof LIGHT_TEXT | typeof DARK_TEXT;
+
+/** WCAG minimum contrast ratios (see WCAG 2.1 contrast-minimum). */
+export const MIN_CONTRAST_AAA: number = 7;
+export const MIN_CONTRAST_AA: number = 4.5;
+export const MIN_CONTRAST_LARGE: number = 3;
+
+/** WCAG relative-luminance sRGB constants. */
+export const SRGB_THRESHOLD: number = 0.03928;
+export const SRGB_LINEAR: number = 12.92;
+export const SRGB_GAMMA: number = 2.4;
+export const SRGB_GAMMA_OFFSET: number = 0.055;
+export const SRGB_GAMMA_DIVISOR: number = 1.055;
+export const LUMINANCE_OFFSET: number = 0.05;
+
+/** WCAG sRGB relative-luminance channel weights. */
+export const LUMINANCE_RED: number = 0.2126;
+export const LUMINANCE_GREEN: number = 0.7152;
+export const LUMINANCE_BLUE: number = 0.0722;
+
+/** WCAG rating badges for a contrast ratio. */
+export type ContrastRating = "AAA" | "AA" | "AA large" | "Fail";
 
 /* ----- Palette & app colors ----- */
 
@@ -25,18 +91,18 @@ export interface ColorOption {
 
 /** The predefined palette shown in the "Palette" section. */
 export const COLOR_OPTIONS: readonly ColorOption[] = [
-  { value: hex("#667eea"), label: "Blue Purple" },
-  { value: hex("#FF0000"), label: "Red" },
-  { value: hex("#00FF00"), label: "Green" },
-  { value: hex("#0000FF"), label: "Blue" },
-  { value: hex("#FFFF00"), label: "Yellow" },
-  { value: hex("#FF00FF"), label: "Magenta" },
-  { value: hex("#00FFFF"), label: "Cyan" },
-  { value: hex("#FFA500"), label: "Orange" },
-  { value: hex("#800080"), label: "Purple" },
-  { value: hex("#FFC0CB"), label: "Pink" },
-  { value: hex("#A52A2A"), label: "Brown" },
-  { value: hex("#808080"), label: "Gray" },
+  { value: hex("#667eea"), label: COPY.palette.colors.bluePurple },
+  { value: hex("#FF0000"), label: COPY.palette.colors.red },
+  { value: hex("#00FF00"), label: COPY.palette.colors.green },
+  { value: hex("#0000FF"), label: COPY.palette.colors.blue },
+  { value: hex("#FFFF00"), label: COPY.palette.colors.yellow },
+  { value: hex("#FF00FF"), label: COPY.palette.colors.magenta },
+  { value: hex("#00FFFF"), label: COPY.palette.colors.cyan },
+  { value: hex("#FFA500"), label: COPY.palette.colors.orange },
+  { value: hex("#800080"), label: COPY.palette.colors.purple },
+  { value: hex("#FFC0CB"), label: COPY.palette.colors.pink },
+  { value: hex("#A52A2A"), label: COPY.palette.colors.brown },
+  { value: hex("#808080"), label: COPY.palette.colors.gray },
 ];
 
 /** Default color = the first palette option (kept in sync via the same source). */
@@ -109,8 +175,8 @@ export type ChannelKey = (typeof CHANNELS)[number]["key"];
 export type HslMode = "sliders" | "plane";
 
 export const MODES: readonly { id: HslMode; label: string }[] = [
-  { id: "sliders", label: "Sliders" },
-  { id: "plane", label: "2D plane" },
+  { id: "sliders", label: COPY.hsl.modeSliders },
+  { id: "plane", label: COPY.hsl.modePlane },
 ];
 
 /** Type guard for the HSL display modes. */
@@ -145,8 +211,8 @@ export const RAD_TO_DEG: number = 180 / Math.PI;
 
 /* ----- Styling: reusable Tailwind class fragments -----
  *
- * Tailwind v4 picks these utility strings up during its source scan, so all
- * class fragments must live in this file to stay in the built CSS.
+ * This file is explicitly scanned by Tailwind (see the @source rule in
+ * index.css), so all class fragments must live here to stay in the built CSS.
  */
 
 /** Shared drop-shadow class for interactive controls (hue wheel + 2D plane). */

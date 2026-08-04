@@ -1,4 +1,33 @@
 import { clamp } from "./mathUtils";
+import {
+  hex,
+  hexToRgb,
+  RGB_MAX,
+  HUE_MAX,
+  HUE_SEGMENT,
+  PERCENT_MAX,
+  LIGHT_TEXT,
+  DARK_TEXT,
+  MIN_CONTRAST_AAA,
+  MIN_CONTRAST_AA,
+  MIN_CONTRAST_LARGE,
+  SRGB_THRESHOLD,
+  SRGB_LINEAR,
+  SRGB_GAMMA,
+  SRGB_GAMMA_OFFSET,
+  SRGB_GAMMA_DIVISOR,
+  LUMINANCE_OFFSET,
+  LUMINANCE_RED,
+  LUMINANCE_GREEN,
+  LUMINANCE_BLUE,
+  type HexColor,
+  type TextColor,
+  type ContrastRating,
+} from "../constants";
+
+// Re-exported so existing callers can keep importing them from here.
+export { hexToRgb };
+export type { HexColor };
 
 export interface Rgb {
   r: number;
@@ -11,53 +40,6 @@ export interface Hsl {
   s: number;
   l: number;
 }
-
-/* ----- Color-domain constants ----- */
-
-/** Max byte value of a single RGB channel. */
-export const RGB_MAX = 255;
-
-/** Full 360° hue circle in degrees. */
-export const HUE_MAX = 360;
-
-/** Width of one hue segment (60° per primary/secondary transition). */
-export const HUE_SEGMENT = 60;
-
-/** Saturation/lightness percentage scale (0–100). */
-export const PERCENT_MAX = 100;
-
-/** White text — highest contrast on dark backgrounds. */
-export const LIGHT_TEXT = "#FFFFFF";
-
-/** Dark-slate text — highest contrast on light backgrounds. */
-export const DARK_TEXT = "#0F172A";
-
-/** The two text colors that always read well on any background. */
-export type TextColor = typeof LIGHT_TEXT | typeof DARK_TEXT;
-
-/** WCAG minimum contrast ratios (see WCAG 2.1 contrast-minimum). */
-export const MIN_CONTRAST_AAA = 7;
-export const MIN_CONTRAST_AA = 4.5;
-export const MIN_CONTRAST_LARGE = 3;
-
-/** WCAG relative-luminance sRGB constants. */
-const SRGB_THRESHOLD = 0.03928;
-const SRGB_LINEAR = 12.92;
-const SRGB_GAMMA = 2.4;
-const SRGB_GAMMA_OFFSET = 0.055;
-const SRGB_GAMMA_DIVISOR = 1.055;
-const LUMINANCE_OFFSET = 0.05;
-
-/** WCAG sRGB relative-luminance channel weights. */
-const LUMINANCE_RED = 0.2126;
-const LUMINANCE_GREEN = 0.7152;
-const LUMINANCE_BLUE = 0.0722;
-
-/** A normalized "#RRGGBB" hex color string. */
-export type HexColor = string & { readonly __brand: "HexColor" };
-
-/** Coerce a known-valid hex string to the branded HexColor type. */
-export const hex = (value: string): HexColor => value as HexColor;
 
 export const isValidHexColor = (color: string): color is HexColor => {
   return /^#([0-9A-F]{3}|[0-9A-F]{6})$/i.test(color);
@@ -97,13 +79,6 @@ export const glossOverlay = (alpha = 0.25): string =>
 export const saturationGradient = (hue: number): string =>
   `linear-gradient(to right, hsl(${hue}, 0%, ${PERCENT_MAX / 2}%), hsl(${hue}, 100%, ${PERCENT_MAX / 2}%))`;
 
-/** Convert "#RRGGBB" to an rgba() string ("" when the hex is invalid). */
-export const hexToRgba = (hexColor: string, alpha: number): string => {
-  const rgb = hexToRgb(hexColor);
-  if (!rgb) return "";
-  return `rgba(${rgb.r},${rgb.g},${rgb.b},${alpha})`;
-};
-
 /** Horizontal lightness gradient (0% → 100% lightness) at a given hue. */
 export const lightnessGradient = (hue: number): string =>
   `linear-gradient(to right, hsl(${hue}, 100%, 0%), hsl(${hue}, 100%, ${PERCENT_MAX / 2}%), hsl(${hue}, 100%, 100%))`;
@@ -137,17 +112,6 @@ export const normalizeHex = (color: string): string => {
       .join("");
   }
   return `#${hex.toUpperCase()}`;
-};
-
-export const hexToRgb = (hex: string): Rgb | null => {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
-      }
-    : null;
 };
 
 export const rgbToHex = (r: number, g: number, b: number): HexColor => {
@@ -260,9 +224,6 @@ export const getTextColor = (hex: string): TextColor => {
     ? LIGHT_TEXT
     : DARK_TEXT;
 };
-
-/** WCAG rating badges for a contrast ratio. */
-export type ContrastRating = "AAA" | "AA" | "AA large" | "Fail";
 
 /** Map a contrast ratio to its WCAG rating (see WCAG 2.1 contrast-minimum). */
 export const getContrastRating = (ratio: number): ContrastRating => {

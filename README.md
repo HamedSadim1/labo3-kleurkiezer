@@ -112,6 +112,7 @@ src/
 │   ├── SectionHeader.tsx
 │   └── SegmentedControl.tsx
 ├── constants.ts
+├── copy.ts
 ├── hooks/
 │   ├── useLocalStorage.ts
 │   └── useTimedReset.ts

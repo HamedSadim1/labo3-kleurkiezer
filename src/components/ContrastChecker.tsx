@@ -2,12 +2,16 @@ import React from "react";
 import {
   getContrastRatio,
   getTextColor,
-  DARK_TEXT,
-  LIGHT_TEXT,
   type HexColor,
 } from "../utils/colorUtils";
 import { getRatingBadge } from "../utils/contrastUtils";
-import { CONTRAST_DECIMALS, CONTRAST_SWATCH_SIZE } from "../constants";
+import {
+  CONTRAST_DECIMALS,
+  CONTRAST_SWATCH_SIZE,
+  DARK_TEXT,
+  LIGHT_TEXT,
+} from "../constants";
+import { COPY } from "../copy";
 
 interface ContrastCheckerProps {
   color: HexColor;
@@ -38,14 +42,16 @@ const ContrastChecker: React.FC<ContrastCheckerProps> = ({ color }) => {
             style={{ backgroundColor: sample.text, color }}
             aria-hidden="true"
           >
-            Aa
+            {COPY.contrast.sampleAa}
           </span>
           <span className="min-w-0 flex-1">
             <span
               className="block truncate text-xs font-semibold"
               style={{ color: sample.text }}
             >
-              {sample.key === "light" ? "White text" : "Dark text"}
+              {sample.key === "light"
+                ? COPY.contrast.whiteText
+                : COPY.contrast.darkText}
             </span>
             <span
               className="block text-[10px] opacity-80"
@@ -65,9 +71,11 @@ const ContrastChecker: React.FC<ContrastCheckerProps> = ({ color }) => {
       ))}
 
       <p className="text-[11px] text-white/45">
-        Recommended text:{" "}
+        {COPY.contrast.recommended}{" "}
         <span className="font-mono text-white/70">
-          {recommended === LIGHT_TEXT ? "white" : "dark"}
+          {recommended === LIGHT_TEXT
+            ? COPY.contrast.white
+            : COPY.contrast.dark}
         </span>
       </p>
     </div>

@@ -1,20 +1,17 @@
 import React, { useRef } from "react";
-import {
-  hslToHex,
-  HUE_MAX,
-  PERCENT_MAX,
-  type HexColor,
-} from "../utils/colorUtils";
+import { hslToHex, type HexColor } from "../utils/colorUtils";
 import {
   CENTER_DOT_SIZE,
   CONTROL_FOCUS_RING,
   CONTROL_SHADOW,
   DEG_TO_RAD,
   HUE_KEY_STEP_FAST,
+  HUE_MAX,
   KEY_STEP,
   LIGHTNESS_MID,
   MARKER_CENTER_PCT,
   MARKER_RADIUS_PCT,
+  PERCENT_MAX,
   PICKER_MARKER_CLASS,
   RAD_TO_DEG,
   WHEEL_GRADIENT,
@@ -22,6 +19,7 @@ import {
 } from "../constants";
 import { handlePointerDown, handlePointerMove } from "../utils/pointerUtils";
 import { getArrowKeyIntent } from "../utils/keyboardUtils";
+import { COPY } from "../copy";
 
 interface HueWheelProps {
   hue: number;
@@ -64,7 +62,7 @@ const HueWheel: React.FC<HueWheelProps> = ({ hue, color, onChange }) => {
     <div
       ref={wheelRef}
       role="slider"
-      aria-label="Hue"
+      aria-label={COPY.hsl.hue}
       aria-valuemin={0}
       aria-valuemax={HUE_MAX - 1}
       aria-valuenow={hue}
