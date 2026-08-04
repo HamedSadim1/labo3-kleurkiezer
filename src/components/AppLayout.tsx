@@ -1,25 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ColorPicker from "./ColorPicker";
 import { DEFAULT_COLOR } from "../constants/colors";
+import useLocalStorage, { serializeRaw } from "../hooks/useLocalStorage";
 
 const COLOR_KEY = "color-studio-color";
 
 const AppLayout: React.FC = () => {
-  const [color, setColor] = useState<string>(() => {
-    try {
-      return localStorage.getItem(COLOR_KEY) || DEFAULT_COLOR;
-    } catch {
-      return DEFAULT_COLOR;
-    }
+  const [color, setColor] = useLocalStorage<string>(COLOR_KEY, DEFAULT_COLOR, {
+    deserialize: (raw) => raw || DEFAULT_COLOR,
+    serialize: serializeRaw,
   });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(COLOR_KEY, color);
-    } catch {
-      // Storage unavailable — ignore.
-    }
-  }, [color]);
 
   return (
     <div className="relative min-h-screen overflow-hidden text-white">

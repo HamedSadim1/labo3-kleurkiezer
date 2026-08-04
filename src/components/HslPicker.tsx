@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { hexToHsl, hslToHex } from "../utils/colorUtils";
+import useLocalStorage, { serializeRaw } from "../hooks/useLocalStorage";
 
 interface HslPickerProps {
   color: string;
@@ -22,27 +23,15 @@ const clamp = (value: number, min: number, max: number) =>
   Math.min(max, Math.max(min, value));
 
 const HslPicker: React.FC<HslPickerProps> = ({ color, onChange }) => {
-  const [mode, setMode] = useState<HslMode>(() => {
-    try {
-      const saved = localStorage.getItem(MODE_KEY);
-      return saved === "sliders" || saved === "plane" ? saved : "sliders";
-    } catch {
-      return "sliders";
-    }
+  const [mode, setMode] = useLocalStorage<HslMode>(MODE_KEY, "sliders", {
+    deserialize: (raw) =>
+      raw === "sliders" || raw === "plane" ? raw : "sliders",
+    serialize: serializeRaw,
   });
   const hsl = hexToHsl(color) ?? { h: 0, s: 100, l: 50 };
   const hue = hsl.h % 360;
   const wheelRef = useRef<HTMLDivElement>(null);
   const planeRef = useRef<HTMLDivElement>(null);
-
-  // Remember the chosen mode across sessions.
-  useEffect(() => {
-    try {
-      localStorage.setItem(MODE_KEY, mode);
-    } catch {
-      // Storage unavailable — ignore.
-    }
-  }, [mode]);
 
   /* ----- Hue wheel ----- */
 

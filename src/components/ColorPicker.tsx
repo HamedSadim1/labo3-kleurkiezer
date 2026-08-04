@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ColorInput from "./ColorInput";
 import ColorSelect from "./ColorSelect";
 import HslPicker from "./HslPicker";
@@ -8,6 +8,7 @@ import ColorHarmony from "./ColorHarmony";
 import ContrastChecker from "./ContrastChecker";
 import SavedColors from "./SavedColors";
 import { DEFAULT_COLOR } from "../constants/colors";
+import useLocalStorage from "../hooks/useLocalStorage";
 
 interface ColorPickerProps {
   color: string;
@@ -28,35 +29,29 @@ const SectionTitle: React.FC<{ children: React.ReactNode }> = ({
 );
 
 const ColorPicker: React.FC<ColorPickerProps> = ({ color, onChange }) => {
-  const [recentColors, setRecentColors] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem(RECENTS_KEY);
-      const parsed: string[] = saved ? JSON.parse(saved) : [];
-      return parsed.length ? parsed : [DEFAULT_COLOR];
-    } catch {
-      return [DEFAULT_COLOR];
-    }
-  });
+  const [recentColors, setRecentColors] = useLocalStorage<string[]>(
+    RECENTS_KEY,
+    [DEFAULT_COLOR],
+    {
+      deserialize: (raw) => {
+        const parsed: string[] = JSON.parse(raw);
+        return parsed.length ? parsed : [DEFAULT_COLOR];
+      },
+    },
+  );
 
-  const [savedColors, setSavedColors] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem(SAVED_KEY);
-      const parsed: unknown = saved ? JSON.parse(saved) : [];
-      return Array.isArray(parsed)
-        ? parsed.filter((item): item is string => typeof item === "string")
-        : [];
-    } catch {
-      return [];
-    }
-  });
-
-  useEffect(() => {
-    localStorage.setItem(RECENTS_KEY, JSON.stringify(recentColors));
-  }, [recentColors]);
-
-  useEffect(() => {
-    localStorage.setItem(SAVED_KEY, JSON.stringify(savedColors));
-  }, [savedColors]);
+  const [savedColors, setSavedColors] = useLocalStorage<string[]>(
+    SAVED_KEY,
+    [],
+    {
+      deserialize: (raw) => {
+        const parsed: unknown = JSON.parse(raw);
+        return Array.isArray(parsed)
+          ? parsed.filter((item): item is string => typeof item === "string")
+          : [];
+      },
+    },
+  );
 
   /**
    * Sliders and the native picker fire continuously, so they call
