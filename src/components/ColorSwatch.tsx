@@ -1,5 +1,6 @@
 import React from "react";
-import { glossOverlay, type HexColor } from "../utils/colorUtils";
+import { glossOverlay } from "../utils/colorUtils";
+import { type HexColor } from "../constants";
 
 interface ColorSwatchProps {
   color: HexColor;

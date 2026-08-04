@@ -1,15 +1,12 @@
 import React from "react";
-import {
-  getContrastRatio,
-  getTextColor,
-  type HexColor,
-} from "../utils/colorUtils";
+import { getContrastRatio, getTextColor } from "../utils/colorUtils";
 import { getRatingBadge } from "../utils/contrastUtils";
 import {
   CONTRAST_DECIMALS,
   CONTRAST_SWATCH_SIZE,
   DARK_TEXT,
   LIGHT_TEXT,
+  type HexColor,
 } from "../constants";
 import { COPY } from "../copy";
 

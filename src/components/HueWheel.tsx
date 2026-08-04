@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { hslToHex, type HexColor } from "../utils/colorUtils";
+import { hslToHex } from "../utils/colorUtils";
 import {
   CENTER_DOT_SIZE,
   CONTROL_FOCUS_RING,
@@ -16,6 +16,7 @@ import {
   RAD_TO_DEG,
   WHEEL_GRADIENT,
   WHEEL_SIZE,
+  type HexColor,
 } from "../constants";
 import { handlePointerDown, handlePointerMove } from "../utils/pointerUtils";
 import { getArrowKeyIntent } from "../utils/keyboardUtils";

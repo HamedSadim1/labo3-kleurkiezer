@@ -1,9 +1,10 @@
 import React from "react";
-import { colorsEqual, type HexColor } from "../utils/colorUtils";
+import { colorsEqual } from "../utils/colorUtils";
 import {
   REMOVE_BADGE_BG,
   REMOVE_BADGE_SIZE,
   SAVED_GRID_COLS,
+  type HexColor,
 } from "../constants";
 import { COPY } from "../copy";
 import useTimedReset from "../hooks/useTimedReset";

@@ -1,10 +1,10 @@
 import React from "react";
-import { type HexColor } from "../utils/colorUtils";
 import {
   SPHERE_GLOW_CLASS,
   SPHERE_OVERLAY,
   SPHERE_SHADOW,
   SPHERE_SIZE,
+  type HexColor,
 } from "../constants";
 
 interface ColorDisplayProps {

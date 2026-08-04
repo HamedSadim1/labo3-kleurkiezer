@@ -1,8 +1,5 @@
 import React, { useRef } from "react";
-import {
-  saturationLightnessPlaneGradient,
-  type HexColor,
-} from "../utils/colorUtils";
+import { saturationLightnessPlaneGradient } from "../utils/colorUtils";
 import {
   CONTROL_FOCUS_RING,
   CONTROL_SHADOW,
@@ -12,6 +9,7 @@ import {
   PICKER_MARKER_CLASS,
   PLANE_KEY_STEP_FAST,
   PLANE_SIZE,
+  type HexColor,
 } from "../constants";
 import { handlePointerDown, handlePointerMove } from "../utils/pointerUtils";
 import { getArrowKeyIntent } from "../utils/keyboardUtils";

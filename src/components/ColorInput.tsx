@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import {
-  hexToRgb,
   rgbToHex,
   isValidHexColor,
   normalizeHex,
   glossOverlay,
   rgbSliderGradient,
-  type HexColor,
 } from "../utils/colorUtils";
 import {
   CHANNELS,
@@ -17,7 +15,9 @@ import {
   PICKER_SWATCH_SIZE,
   RGB_MAX,
   SWATCH_GLOSS_ALPHA,
+  hexToRgb,
   type ChannelKey,
+  type HexColor,
 } from "../constants";
 import { COPY } from "../copy";
 

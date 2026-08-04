@@ -1,7 +1,12 @@
 import React from "react";
-import { hexToRgb, hexToHsl, type HexColor } from "../utils/colorUtils";
+import { hexToHsl } from "../utils/colorUtils";
 import useTimedReset from "../hooks/useTimedReset";
-import { COPY_BUTTON_SIZE, VALUE_LABEL_WIDTH } from "../constants";
+import {
+  COPY_BUTTON_SIZE,
+  VALUE_LABEL_WIDTH,
+  hexToRgb,
+  type HexColor,
+} from "../constants";
 import { copyToClipboard } from "../utils/clipboardUtils";
 import { COPY } from "../copy";
 import { CheckIcon, CopyIcon } from "./icons";

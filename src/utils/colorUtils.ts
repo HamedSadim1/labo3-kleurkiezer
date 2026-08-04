@@ -25,10 +25,6 @@ import {
   type ContrastRating,
 } from "../constants";
 
-// Re-exported so existing callers can keep importing them from here.
-export { hexToRgb };
-export type { HexColor };
-
 export interface Rgb {
   r: number;
   g: number;

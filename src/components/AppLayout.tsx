@@ -8,10 +8,11 @@ import {
   BG_BLOB_PRIMARY,
   COLOR_KEY,
   DEFAULT_COLOR,
+  type HexColor,
 } from "../constants";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { serializeRaw } from "../utils/storageUtils";
-import { isValidHexColor, type HexColor } from "../utils/colorUtils";
+import { isValidHexColor } from "../utils/colorUtils";
 import { COPY } from "../copy";
 
 const AppLayout: React.FC = () => {

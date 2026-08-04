@@ -16,6 +16,7 @@ import {
   RECENT_SWATCH_SIZE,
   RECENTS_KEY,
   SAVED_KEY,
+  type HexColor,
 } from "../constants";
 import { COPY } from "../copy";
 import useLocalStorage from "../hooks/useLocalStorage";
@@ -24,7 +25,6 @@ import {
   parseHexArray,
   prependUnique,
   withoutColor,
-  type HexColor,
 } from "../utils/colorUtils";
 
 interface ColorPickerProps {

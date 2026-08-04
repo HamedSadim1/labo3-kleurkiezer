@@ -4,7 +4,6 @@ import {
   hslToHex,
   lightnessGradient,
   saturationGradient,
-  type HexColor,
 } from "../utils/colorUtils";
 import {
   HUE_MAX,
@@ -15,6 +14,7 @@ import {
   SLIDER_COLUMN_WIDTH,
   isHslMode,
   type HslMode,
+  type HexColor,
 } from "../constants";
 import { COPY } from "../copy";
 import useLocalStorage from "../hooks/useLocalStorage";

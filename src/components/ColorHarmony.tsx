@@ -1,6 +1,10 @@
 import React from "react";
-import { getHarmony, type HexColor } from "../utils/colorUtils";
-import { HARMONY_LABEL_WIDTH, HARMONY_SWATCH_SIZE } from "../constants";
+import { getHarmony } from "../utils/colorUtils";
+import {
+  HARMONY_LABEL_WIDTH,
+  HARMONY_SWATCH_SIZE,
+  type HexColor,
+} from "../constants";
 import { COPY } from "../copy";
 import ColorSwatch from "./ColorSwatch";
 

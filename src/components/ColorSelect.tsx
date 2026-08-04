@@ -1,7 +1,7 @@
 import React from "react";
-import { COLOR_OPTIONS, PALETTE_GRID_COLS } from "../constants";
+import { COLOR_OPTIONS, PALETTE_GRID_COLS, type HexColor } from "../constants";
 import { COPY } from "../copy";
-import { colorsEqual, type HexColor } from "../utils/colorUtils";
+import { colorsEqual } from "../utils/colorUtils";
 import ColorSwatch from "./ColorSwatch";
 
 interface ColorSelectProps {
